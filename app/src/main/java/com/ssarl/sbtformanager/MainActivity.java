@@ -33,11 +33,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DatabaseReference tokenDatabase;
     private DatabaseReference questionsDatabase;
     int tokenCount = 0;
-    //int questionCount = 0;
+    int questionCount = 0;
     int randomNumberForQuestions = 0;
     int random;
     Button btnn, makeQuestion;
-    TextView tvv1, tvv2, tvv3;
+    TextView tvv1, tvv2;
     EditText ett1, ett2;
     String questionNum;
     String question;
@@ -93,11 +93,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         qClass = snapshot.getValue(Question.class); // 파이어베이스에서 데이터를 Question 클래스 변수 qClass에 담기
                         questionList.add(qClass); // list에 data 추가.
-                        //questionCount++; // 질문 개수 카운트
+                        questionCount++; // 질문 개수 카운트
                     }
-
-                    Random rnd = new Random(); // 랜덤 함수 초기화
-                    //randomNumberForQuestions = rnd.nextInt(questionCount) + 1; // 0부터 tokenCount-1 까지 난수 생성 후 index 에 담기
                 }
 
                 @Override
@@ -117,11 +114,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ett2 = (EditText) findViewById(R.id.et2);
         tvv1 = (TextView) findViewById(R.id.tv1);
         tvv2 = (TextView) findViewById(R.id.tv2);
-        tvv3 = (TextView) findViewById(R.id.tv3);
-
-        //question = ett1.getText().toString();
-        //question = questionList.get(0).question_num + " : " + questionList.get(0).question_content;
-        //validTime = ett2.getText().toString();
 
         btnn.setOnClickListener(this);
         makeQuestion.setOnClickListener(new View.OnClickListener() {
@@ -135,18 +127,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+
+        Random random = new Random(); // 랜덤 함수 초기화
+        random.setSeed(System.currentTimeMillis()); // 시드 설정. 어플을 실행시켰을 시 같은 값만 나오는 것을 제거
+        randomNumberForQuestions = random.nextInt(questionCount) + 0; // 0부터 tokenCount-1 까지 난수 생성 후 index 에 담기
+
         questionNum = questionList.get(randomNumberForQuestions).question_num;
         question = questionList.get(randomNumberForQuestions).question_content;
         validTime = ett2.getText().toString();
+        if(validTime.equals("")) return; // 빈 시간이 들어갔을 경우 무효화 처리
 
-        Log.e("onCreate: ", questionNum+ " : " + question);
         tvv1.setText(question);
         tvv2.setText(validTime);
-        //tvv3.setText("{\"question\":\"" + question + "\",\"validTime\":\"" + validTime + "\"}");
 
         (new Thread(this)).start();
     }
-
 
     //final int time = questionCount * 5; // 상수 time은 tokenCount*5로 초기화
     // Delay(time); // 사용자 지정 함수 Delay(time)을 호출
