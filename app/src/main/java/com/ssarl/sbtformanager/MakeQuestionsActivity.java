@@ -32,8 +32,8 @@ public class MakeQuestionsActivity extends AppCompatActivity {
         finish_btn.setOnClickListener(new View.OnClickListener() { // Finish 버튼 누를 시
             @Override
             public void onClick(View view) {
-                if(mRef.child("Question").getKey() != null){ // Question 키가 존재할 시
-                    mRef.child("Question").addListenerForSingleValueEvent(new ValueEventListener() {
+                if(mRef.child("Questions").getKey() != null){ // Question 키가 존재할 시
+                    mRef.child("Questions").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             int index = 0; // 마지막 데이터를 선별하기 위한 index 변수 선언
@@ -43,7 +43,7 @@ public class MakeQuestionsActivity extends AppCompatActivity {
                             Question question = new Question(); // Question 클래스 초기화
                             question.question_num = Integer.toString(index);  // question_num 에 index 저장
                             question.question_content = edit_question.getText().toString();
-                            mRef.child("Question").push().setValue(question); // 데이터 삽입
+                            mRef.child("Questions").push().setValue(question); // 데이터 삽입
                             finish();
                         }
 
@@ -57,7 +57,7 @@ public class MakeQuestionsActivity extends AppCompatActivity {
                     Question question = new Question();
                     question.question_num = "0";
                     question.question_content = edit_question.getText().toString();
-                    mRef.child("Question").push().setValue(question);
+                    mRef.child("Questions").push().setValue(question);
                 }
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);

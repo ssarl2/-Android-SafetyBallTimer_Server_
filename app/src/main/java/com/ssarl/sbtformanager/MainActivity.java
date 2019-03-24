@@ -79,11 +79,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // START Get Question from Firebase server
         questionsDatabase = FirebaseDatabase.getInstance().getReference();
-        if (questionsDatabase.child("Question").getKey() != null) {// 질문 존재여부 확인
+        if (questionsDatabase.child("Questions").getKey() != null) {// 질문 존재여부 확인
 
             questionList.clear();
 
-            questionsDatabase.child("Question").addValueEventListener(new ValueEventListener() {
+            questionsDatabase.child("Questions").addValueEventListener(new ValueEventListener() {
 
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
