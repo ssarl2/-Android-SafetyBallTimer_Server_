@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Question qClass; // Question 클래스 초기화
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        qClass = snapshot.getValue(Question.class); // 파이어베이스에서 데이터를 Question 클래스 변수 qClass에 담기
+                        qClass = snapshot.getValue(Question.class); // 파이어베이스에서 데이터를 Question 클래스 객체 qClass에 담기
                         questionList.add(qClass); // list에 data 추가.
                         questionCount++; // 질문 개수 카운트
                     }
