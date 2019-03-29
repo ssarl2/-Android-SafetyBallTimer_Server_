@@ -10,10 +10,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.jjoe64.graphview.GraphView
-            android:id="@+id/graph1"
+        <ListView
             android:layout_width="match_parent"
-            android:layout_height="150dp" />
+            android:layout_height="wrap_content"
+            android:id="@+id/listview">
+        </ListView>
 
     </LinearLayout>
 

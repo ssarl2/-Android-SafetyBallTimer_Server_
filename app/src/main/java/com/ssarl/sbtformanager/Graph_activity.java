@@ -1,37 +1,60 @@
 package com.ssarl.sbtformanager;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.ListView;
 
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class Graph_activity extends AppCompatActivity {
+    private ListView listView;
+    final ListviewActivity listviewAdapter = new ListviewActivity();
+    int count = 0;
+    FirebaseDatabase mDatabase;
+    DatabaseReference MyRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph_activity);
-        int num=1;
-        GraphView graph1 = (GraphView)findViewById(R.id.graph1);
+        listView = (ListView) findViewById(R.id.listview);
+
+        mDatabase = FirebaseDatabase.getInstance();
+        MyRef = mDatabase.getReference();
+
+        final ArrayList<Question> arrayList = new ArrayList<>();
 
 
+        MyRef.child("Questions").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("데이터베이스 작동 중", "ddddddddd");
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Question data = snapshot.getValue(Question.class);
+                    arrayList.add(data);
+                    count++;
+                    Log.d("size", Integer.toString(count));
+                }
 
-        LineGraphSeries<DataPoint> series=new LineGraphSeries<>(getDataPoint());
-        graph1.addSeries(series);
-
-    }
-
-    private DataPoint[] getDataPoint() {
-        DataPoint[] answer = new DataPoint[]{
-                new DataPoint(1000/60,1),//x에 now 값 Y에 Q값에 따른 answer값
-                new DataPoint(1065/60,6),
-                new DataPoint(1550/60,5),
+            }
 
 
-        };
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-        return (answer);
+            }
+
+
+        });
+        listView.setAdapter(listviewAdapter);
     }
 }
