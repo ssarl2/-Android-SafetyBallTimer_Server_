@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int questionCount = 0;
     int randomNumberForQuestions = 0;
     int random;
-    Button btnn, makeQuestion;
+    Button btnn, makeQuestion,graphbtn;
     TextView tvv1, tvv2;
     EditText ett1, ett2;
     String questionNum;
@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // END Get Data from Firebase server
 
         btnn = (Button) findViewById(R.id.btn);
+        graphbtn=(Button)findViewById(R.id.button);
         makeQuestion = (Button)findViewById(R.id.btn2);
         ett1 = (EditText) findViewById(R.id.et1);
         ett2 = (EditText) findViewById(R.id.et2);
@@ -116,11 +117,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvv2 = (TextView) findViewById(R.id.tv2);
 
         btnn.setOnClickListener(this);
+
         makeQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),MakeQuestionsActivity.class);
                 startActivity(intent);
+            }
+        });
+        graphbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),Graph_activity.class);
+                startActivity(intent);
+
             }
         });
     }
