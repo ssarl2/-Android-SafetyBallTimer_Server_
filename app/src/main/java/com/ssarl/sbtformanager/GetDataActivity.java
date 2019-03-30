@@ -58,13 +58,13 @@ public class GetDataActivity extends AppCompatActivity {
                         int index3=temp3.indexOf(",");
                         temp3=temp3.substring(0,index3);
 
-                        getQuesNum.add(temp);
-                        getAnswerNum.add(temp2);
-                        getTime.add(temp3);
+                        getQuesNum.add(temp);//대답한질문넘버
+                        getAnswerNum.add(temp2);//대답한값
+                        getTime.add(temp3);//대답한시간
                         Log.d("답2",getQuesNum.get(valCount));
                         Log.d("답3",getAnswerNum.get(valCount));
                         Log.d("답4",getTime.get(valCount));
-                        valCount++;
+                        valCount++;//총 답변 수
                     }
                 }
 
