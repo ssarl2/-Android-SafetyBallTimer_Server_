@@ -1,5 +1,7 @@
 package com.ssarl.sbtformanager;
 
+import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Graph_activity extends AppCompatActivity {
+
     private ListView listView;
     private List<Question> list;
     int count = 0;
@@ -30,7 +33,6 @@ public class Graph_activity extends AppCompatActivity {
 
         FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
         DatabaseReference MyRef = mDatabase.getReference();
-        Log.d("데이터베이스 작동 중", "ddddddddd");
 
         list = new ArrayList<Question>();
         final ListviewActivity listviewAdapter = new ListviewActivity(this, R.layout.custom_list, list);
@@ -38,11 +40,11 @@ public class Graph_activity extends AppCompatActivity {
         MyRef.child("Questions").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Question data = snapshot.getValue(Question.class);
                     list.add(data);
                     count++;
-                    Log.d("size", data.question_num);
+                    Log.d("사이즈", data.question_num);
                 }
                 listviewAdapter.notifyDataSetChanged(); // 리스트뷰 갱신 ( 이 코드가 있어야 데이터베이스를 기준으로 둔 리스트뷰를 볼 수 있음. )
             }
@@ -53,7 +55,7 @@ public class Graph_activity extends AppCompatActivity {
             }
 
         });
-
         listView.setAdapter(listviewAdapter);
+
     }
 }
