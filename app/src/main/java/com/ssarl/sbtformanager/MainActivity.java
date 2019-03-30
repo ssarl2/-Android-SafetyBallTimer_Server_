@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    Question qClass; // Question 클래스 초기화
+                    Question qClass = new Question(); // Question 클래스 초기화
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         qClass = snapshot.getValue(Question.class); // 파이어베이스에서 데이터를 Question 클래스 객체 qClass에 담기

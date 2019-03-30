@@ -20,18 +20,26 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListviewActivity extends BaseAdapter {
-    private ExampleActivity example_data;
-    int count;
-    DataPoint[] dataPoints;
-    public ListviewActivity(){
+    private ExampleActivity example_data = null;
+    private DataPoint[] dataPoints = null;
+    private List<Question> question_list = null;
+    private Context context = null;
+    private int layout;
+
+    public ListviewActivity(Context c, int layout, List<Question> list){
         example_data = new ExampleActivity();
+        this.context = c;
+        this.layout = layout;
+        this.question_list = list;
+        Log.d("인덱스", Integer.toString(question_list.size()));
     }
 
     @Override
     public int getCount() {
-        return count;
+        return question_list.size();
     }
 
     @Override
@@ -47,38 +55,11 @@ public class ListviewActivity extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final int pos = position;
-        final Context context = parent.getContext();
 
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.custom_list, parent, false);
+            convertView = inflater.inflate(layout, parent, false);
         }
-
-       /* FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference MyRef = mDatabase.getReference();
-
-        final ArrayList<Question> arrayList = new ArrayList<>();
-
-        MyRef.child("Questions").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Question data = snapshot.getValue(Question.class);
-                    arrayList.add(data);
-                    count++;
-                    Log.d("size", Integer.toString(count));
-                }
-
-            }
-
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-
-        });*/
 
         example_data.init();
 
@@ -89,6 +70,7 @@ public class ListviewActivity extends BaseAdapter {
             int yPos = example_data.getData(i);
             dataPoints[i-1] = new DataPoint(xPos, yPos);
         }
+
         //PointsGraphSeries<DataPoint> series = new PointsGraphSeries<DataPoint>(dataPoints);
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(dataPoints);
         graph.getViewport().setScrollable(true);
