@@ -3,6 +3,10 @@ package com.ssarl.sbtformanager;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.support.annotation.LongDef;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,33 +22,30 @@ import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.PointsGraphSeries;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListviewActivity extends BaseAdapter {
-    private ExampleActivity example_data = null;
     private DataPoint[] dataPoints = null;
-    private List<Question> question_list = null;
+    private ArrayList<Answer> answers = new ArrayList<>();
     private Context context = null;
     private int layout;
 
-    public ListviewActivity(Context c, int layout, List<Question> list){
-        example_data = new ExampleActivity();
+    public ListviewActivity(Context c, int layout){
         this.context = c;
         this.layout = layout;
-        this.question_list = list;
-        Log.d("인덱스", Integer.toString(question_list.size()));
     }
 
     @Override
     public int getCount() {
-        return question_list.size();
+        return answers.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return example_data.getData(position);
+        return answers.get(position);
     }
 
     @Override
@@ -61,30 +62,35 @@ public class ListviewActivity extends BaseAdapter {
             convertView = inflater.inflate(layout, parent, false);
         }
 
-        example_data.init();
-
+        Log.d("되나안되나", answers.get(0).sentTime);
         GraphView graph = (GraphView) convertView.findViewById(R.id.graph);
-        dataPoints = new DataPoint[24];
-        for(int i=1; i<=24; i++){
-            int xPos = i;
-            int yPos = example_data.getData(i);
-            dataPoints[i-1] = new DataPoint(xPos, yPos);
+
+        dataPoints = new DataPoint[answers.size()];
+        for(int i=0; i<answers.size(); i++){
+            double xPos = Double.parseDouble((answers.get(i).sentTime));
+            int yPos = Integer.parseInt(answers.get(i).value);
+            dataPoints[i] = new DataPoint(xPos, yPos);
+            Log.d("안되나",Double.toString(xPos));
+
+
         }
 
-        //PointsGraphSeries<DataPoint> series = new PointsGraphSeries<DataPoint>(dataPoints);
+        //PointsGraphSeries<DataPoint>series=new PointsGraphSeries<DataPoint>(dataPoints);
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(dataPoints);
-        graph.getViewport().setScrollable(true);
-        graph.getViewport().setMinX(1);
-        graph.getViewport().setMaxX(24);
-        graph.getViewport().setMinY(1);
-        graph.getViewport().setMaxY(100);
-        graph.getViewport().setXAxisBoundsManual(true);
-        graph.getViewport().setYAxisBoundsManual(true);
+     // graph.getViewport().setMinX(1);
+      // graph.getViewport().setMaxX(24);
+      //  graph.getViewport().setMinY(1);
+      //  graph.getViewport().setMaxY(100);
+       // graph.getViewport().setXAxisBoundsManual(true);
+       // graph.getViewport().setYAxisBoundsManual(true);
+        //series.setCustomPaint(paint);
         series.setColor(Color.BLUE);
-        //series.setShape(PointsGraphSeries.Shape.POINT);
-        //series.setSize(10);
         graph.addSeries(series);
 
         return convertView;
+    }
+
+    public void addItem(Answer answer){
+        answers.add(answer);
     }
 }

@@ -22,40 +22,43 @@ import java.util.List;
 public class Graph_activity extends AppCompatActivity {
 
     private ListView listView;
-    private List<Question> list;
-    int count = 0;
+    public DatabaseReference valDatabase;
+    ListviewActivity listviewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph_activity);
-        listView = (ListView) findViewById(R.id.listview);
 
+        listView = (ListView) findViewById(R.id.listview);
         FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
         DatabaseReference MyRef = mDatabase.getReference();
 
-        list = new ArrayList<Question>();
-        final ListviewActivity listviewAdapter = new ListviewActivity(this, R.layout.custom_list, list);
+        // START Get Data from Firebase server
+        valDatabase = FirebaseDatabase.getInstance().getReference();
 
-        MyRef.child("Questions").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Question data = snapshot.getValue(Question.class);
-                    list.add(data);
-                    count++;
-                    Log.d("사이즈", data.question_num);
+        // START Get all token from Firebase server
+        if (valDatabase.child("Answers").getKey() != null) {// 유저 존재여부 확인
+            valDatabase.child("Answers").addValueEventListener(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Answer answer = snapshot.getValue(Answer.class);
+                        listviewAdapter.addItem(answer);
+                        Log.d("Graph_activity 데이터베이스", answer.questionNum);
+                    }
+                    listviewAdapter.notifyDataSetChanged(); // 리스트뷰 갱신 ( 이 코드가 있어야 데이터베이스를 기준으로 둔 리스트뷰를 볼 수 있음. )
                 }
-                listviewAdapter.notifyDataSetChanged(); // 리스트뷰 갱신 ( 이 코드가 있어야 데이터베이스를 기준으로 둔 리스트뷰를 볼 수 있음. )
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
+                }
+            });
 
-        });
-        listView.setAdapter(listviewAdapter);
-
+            listviewAdapter = new ListviewActivity(this, R.layout.custom_list);
+            listView.setAdapter(listviewAdapter);
+        }
     }
 }
