@@ -112,9 +112,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         graphbtn=(Button)findViewById(R.id.button);
         makeQuestion = (Button)findViewById(R.id.btn2);
         ett1 = (EditText) findViewById(R.id.et1);
-        ett2 = (EditText) findViewById(R.id.et2);
+
         tvv1 = (TextView) findViewById(R.id.tv1);
-        tvv2 = (TextView) findViewById(R.id.tv2);
+
 
         btnn.setOnClickListener(this);
 
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         graphbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),Graph_activity.class);
+                Intent intent = new Intent(getApplicationContext(),TestActivity.class);
                 startActivity(intent);
 
             }
@@ -144,11 +144,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         questionNum = questionList.get(randomNumberForQuestions).question_num;
         question = questionList.get(randomNumberForQuestions).question_content;
-        validTime = ett2.getText().toString();
+        validTime = Integer.toString(30);
         if(validTime.equals("")) return; // 빈 시간이 들어갔을 경우 무효화 처리
 
         tvv1.setText(question);
-        tvv2.setText(validTime);
+       // tvv2.setText(validTime);
 
         (new Thread(this)).start();
     }

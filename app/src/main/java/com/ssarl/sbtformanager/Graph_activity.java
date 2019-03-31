@@ -46,7 +46,7 @@ public class Graph_activity extends AppCompatActivity {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Answer answer = snapshot.getValue(Answer.class);
                         listviewAdapter.addItem(answer);
-                        Log.d("Graph_activity 데이터베이스", answer.questionNum);
+                        //Log.d("Graph_activity 데이터베이스", answer.questionNum);
                     }
                     listviewAdapter.notifyDataSetChanged(); // 리스트뷰 갱신 ( 이 코드가 있어야 데이터베이스를 기준으로 둔 리스트뷰를 볼 수 있음. )
                 }

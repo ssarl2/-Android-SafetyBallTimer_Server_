@@ -9,9 +9,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/back2"
         android:gravity="center"
         android:orientation="vertical"
-        android:background="@drawable/back2">
+        android:paddingTop="150dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,15 +27,9 @@
                 android:layout_height="wrap_content"
                 android:hint="Question"
                 android:inputType="number"
-                android:textSize="20dp" />
-
-            <TextView
-                android:id="@+id/tv2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="validTime"
-                android:inputType="number"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:lines="3"
+                />
 
         </LinearLayout>
 
@@ -60,12 +55,6 @@
                 android:inputType="number"
                 android:visibility="invisible" />
 
-            <EditText
-                android:id="@+id/et2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="validTime"
-                android:inputType="number" />
         </LinearLayout>
 
         <LinearLayout
@@ -78,19 +67,19 @@
                 android:id="@+id/btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="send" />
+                android:text="Send Notification" />
 
             <Button
                 android:id="@+id/btn2"
-                android:layout_width="wrap_content"
+                android:layout_width="154dp"
                 android:layout_height="wrap_content"
                 android:text="makeQuestion" />
 
             <Button
                 android:id="@+id/button"
-                android:layout_width="136dp"
+                android:layout_width="155dp"
                 android:layout_height="match_parent"
-                android:text="graph" />
+                android:text="Average graph" />
         </LinearLayout>
 
         <LinearLayout
