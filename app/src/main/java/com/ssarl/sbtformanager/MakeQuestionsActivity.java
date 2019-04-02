@@ -36,15 +36,32 @@ public class MakeQuestionsActivity extends AppCompatActivity {
                     mRef.child("Questions").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            int index = 0; // 마지막 데이터를 선별하기 위한 index 변수 선언
-                            for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                                index++;
+                            if(dataSnapshot.exists()){
+                                int index = 0; // 마지막 데이터를 선별하기 위한 index 변수 선언
+                                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                                    index++;
+                                }
+                                Question question = new Question(); // Question 클래스 초기화
+                                question.question_num = Integer.toString(index);  // question_num 에 index 저장
+                                question.question_content = edit_question.getText().toString();
+                                mRef.child("Questions").push().setValue(question); // 데이터 삽입
+                                Analyze analyze = new Analyze();
+                                analyze.que_num = index;
+                                analyze.count = 0;
+                                mRef.child("Analyze").push().setValue(analyze);
+                                finish();
                             }
-                            Question question = new Question(); // Question 클래스 초기화
-                            question.question_num = Integer.toString(index);  // question_num 에 index 저장
-                            question.question_content = edit_question.getText().toString();
-                            mRef.child("Questions").push().setValue(question); // 데이터 삽입
-                            finish();
+                            else{
+                                Question question = new Question();
+                                question.question_num = "0";
+                                question.question_content = edit_question.getText().toString();
+                                mRef.child("Questions").push().setValue(question);
+                                Analyze analyze = new Analyze();
+                                analyze.que_num = 0;
+                                analyze.count = 0;
+                                mRef.child("Analyze").push().setValue(analyze);
+                            }
+
                         }
 
                         @Override
@@ -52,12 +69,6 @@ public class MakeQuestionsActivity extends AppCompatActivity {
 
                         }
                     });
-                }
-                else{
-                    Question question = new Question();
-                    question.question_num = "0";
-                    question.question_content = edit_question.getText().toString();
-                    mRef.child("Questions").push().setValue(question);
                 }
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);

@@ -11,6 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".TestActivity"></activity>
         <activity android:name=".Graph_activity" />
+        <activity android:name=".Graph_activity_chooseQuestion"/>
         <activity android:name=".MakeQuestionsActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

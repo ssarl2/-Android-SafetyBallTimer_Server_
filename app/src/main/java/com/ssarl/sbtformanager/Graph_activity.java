@@ -1,19 +1,28 @@
 package com.ssarl.sbtformanager;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -23,16 +32,27 @@ public class Graph_activity extends AppCompatActivity {
 
     private ListView listView;
     public DatabaseReference valDatabase;
-    ListviewActivity listviewAdapter;
+    Spinner spinner;
+    int que_num;
+    private DataPoint[] dataPoints = null;
+    private ArrayList<Answer> answers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph_activity);
 
-        listView = (ListView) findViewById(R.id.listview);
         FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
         DatabaseReference MyRef = mDatabase.getReference();
+
+        final List<Integer> data = new ArrayList<>();
+        final ArrayList<Analyze> analyzes = new ArrayList<>();
+        final ArrayList<EachValue> value = new ArrayList<EachValue>();
+        spinner = (Spinner)findViewById(R.id.spinner);
+        final com.ssarl.sbtformanager.SpinnerAdapter spinnerAdapter = new com.ssarl.sbtformanager.SpinnerAdapter(this, data);
+        final Button QuestionGraph = (Button)findViewById(R.id.question_graph);
+
+        spinner.setAdapter(spinnerAdapter);
 
         // START Get Data from Firebase server
         valDatabase = FirebaseDatabase.getInstance().getReference();
@@ -45,10 +65,10 @@ public class Graph_activity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Answer answer = snapshot.getValue(Answer.class);
-                        listviewAdapter.addItem(answer);
+                        answers.add(answer);
                         //Log.d("Graph_activity 데이터베이스", answer.questionNum);
                     }
-                    listviewAdapter.notifyDataSetChanged(); // 리스트뷰 갱신 ( 이 코드가 있어야 데이터베이스를 기준으로 둔 리스트뷰를 볼 수 있음. )
+                    //listviewAdapter.notifyDataSetChanged(); // 리스트뷰 갱신 ( 이 코드가 있어야 데이터베이스를 기준으로 둔 리스트뷰를 볼 수 있음. )
                 }
 
                 @Override
@@ -57,8 +77,98 @@ public class Graph_activity extends AppCompatActivity {
                 }
             });
 
-            listviewAdapter = new ListviewActivity(this, R.layout.custom_list);
-            listView.setAdapter(listviewAdapter);
+            //listviewAdapter = new ListviewActivity(this, R.layout.custom_list);
+            //listView.setAdapter(listviewAdapter);
         }
+
+        GraphView graph = (GraphView) findViewById(R.id.graph);
+
+        dataPoints = new DataPoint[answers.size()];
+        for(int i=0; i<answers.size(); i++){
+            double xPos = Double.parseDouble((answers.get(i).sentTime));
+            int yPos = Integer.parseInt(answers.get(i).value);
+            dataPoints[i] = new DataPoint(xPos, yPos);
+            Log.d("안되나",Double.toString(xPos));
+        }
+
+        //PointsGraphSeries<DataPoint>series=new PointsGraphSeries<DataPoint>(dataPoints);
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(dataPoints);
+        // graph.getViewport().setMinX(1);
+        // graph.getViewport().setMaxX(24);
+        //  graph.getViewport().setMinY(1);
+        //  graph.getViewport().setMaxY(100);
+        // graph.getViewport().setXAxisBoundsManual(true);
+        // graph.getViewport().setYAxisBoundsManual(true);
+        //series.setCustomPaint(paint);
+        series.setColor(Color.BLUE);
+        graph.addSeries(series);
+
+        valDatabase.child("Analyze").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Analyze analyze = snapshot.getValue(Analyze.class);
+                    data.add(analyze.que_num);
+                    analyzes.add(analyze);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+        });
+
+        QuestionGraph.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent intent = new Intent(getApplicationContext(), Graph_activity_chooseQuestion.class);
+                que_num = spinnerAdapter.getCurrentQuestionNumber();
+                intent.putExtra("que_num", que_num);
+                intent.putExtra("aalyze_data", (ArrayList<Analyze>)analyzes);
+
+                valDatabase.child("Analyze").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                            Analyze analyze = snapshot.getValue(Analyze.class);
+                            String id = snapshot.getKey();
+                            if(analyze.que_num == que_num){
+                                valDatabase.child("Analyze").child(id).child("EachValue").addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if(dataSnapshot.exists()){
+                                            for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                                                EachValue data = snapshot.getValue(EachValue.class);
+                                                value.add(data);
+
+                                            }
+                                            Log.d("들아옴?", "?????");
+                                            intent.putExtra("values", (ArrayList<EachValue>)value);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                        else{
+                                            Toast.makeText(getApplicationContext(), "At Current, This question doesn't have answer so that can't show graph from analyzed that", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+
+                });
+            }
+        });
     }
 }
