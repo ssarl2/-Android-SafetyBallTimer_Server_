@@ -7,9 +7,15 @@
     android:orientation="vertical"
     tools:context=".Graph_activity">
 
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="AverageGraph" />
+
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
-        android:layout_height="200dip"
+        android:layout_height="200dp"
         android:id="@+id/graph"
         android:background="@drawable/layout_style"/>
 
@@ -17,12 +23,19 @@
         android:id="@+id/spinner"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:background="@drawable/spinner_spinner1"></Spinner>
+        android:background="@drawable/spinner_spinner1">
+    </Spinner>
 
     <Button
         android:id="@+id/question_graph"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Question Graph" />
+
+    <Button
+        android:id="@+id/backToMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Back" />
 
 </LinearLayout>

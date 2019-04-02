@@ -1,9 +1,11 @@
 package com.ssarl.sbtformanager;
 
-public class Answer {
-    public  String questionNum;
-    public  String sentTime;
-    public  String value;
+import android.support.annotation.NonNull;
+
+public class Answer implements Comparable<Answer> {
+    public String questionNum;
+    public String sentTime;
+    public String value;
 
     public Answer(){
         questionNum = "empty";
@@ -14,6 +16,12 @@ public class Answer {
         this.questionNum = questionNum;
         this.sentTime = "time";
         this.value = value;
+    }
 
+    @Override
+    public int compareTo(@NonNull Answer answer) {
+        int compareTime = Integer.parseInt(((Answer)answer).sentTime);
+
+        return Integer.parseInt(this.sentTime) - compareTime;
     }
 }

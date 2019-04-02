@@ -21,11 +21,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class Graph_activity extends AppCompatActivity {
@@ -34,7 +37,6 @@ public class Graph_activity extends AppCompatActivity {
     public DatabaseReference valDatabase;
     Spinner spinner;
     int que_num;
-    private DataPoint[] dataPoints = null;
     private ArrayList<Answer> answers = new ArrayList<>();
 
     @Override
@@ -51,6 +53,7 @@ public class Graph_activity extends AppCompatActivity {
         spinner = (Spinner)findViewById(R.id.spinner);
         final com.ssarl.sbtformanager.SpinnerAdapter spinnerAdapter = new com.ssarl.sbtformanager.SpinnerAdapter(this, data);
         final Button QuestionGraph = (Button)findViewById(R.id.question_graph);
+        final Button backToMain = (Button)findViewById(R.id.backToMain);
 
         spinner.setAdapter(spinnerAdapter);
 
@@ -59,7 +62,7 @@ public class Graph_activity extends AppCompatActivity {
 
         // START Get all token from Firebase server
         if (valDatabase.child("Answers").getKey() != null) {// 유저 존재여부 확인
-            valDatabase.child("Answers").addValueEventListener(new ValueEventListener() {
+            valDatabase.child("Answers").addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -69,6 +72,28 @@ public class Graph_activity extends AppCompatActivity {
                         //Log.d("Graph_activity 데이터베이스", answer.questionNum);
                     }
                     //listviewAdapter.notifyDataSetChanged(); // 리스트뷰 갱신 ( 이 코드가 있어야 데이터베이스를 기준으로 둔 리스트뷰를 볼 수 있음. )
+                    GraphView graph = (GraphView) findViewById(R.id.graph);
+
+                    DataPoint[] dataPoints = new DataPoint[answers.size()];
+                    Collections.sort(answers);
+
+                    for(int i=0; i<answers.size(); i++){
+                        int xPos = Integer.parseInt((answers.get(i).sentTime))/60;
+                        int yPos = Integer.parseInt(answers.get(i).value);
+                        dataPoints[i] = new DataPoint(xPos, yPos);
+
+                        Log.d("안되나",Double.toString(xPos));
+                    }
+                    BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(dataPoints);
+                    series.resetData(dataPoints);
+                    graph.getViewport().setMinX(0);
+                    graph.getViewport().setMaxX(24);
+                    graph.getViewport().setMinY(0);
+                    graph.getViewport().setMaxY(100);
+                    graph.getViewport().setXAxisBoundsManual(true);
+                    graph.getViewport().setYAxisBoundsManual(true);
+                    series.setColor(Color.BLUE);
+                    graph.addSeries(series);
                 }
 
                 @Override
@@ -80,28 +105,6 @@ public class Graph_activity extends AppCompatActivity {
             //listviewAdapter = new ListviewActivity(this, R.layout.custom_list);
             //listView.setAdapter(listviewAdapter);
         }
-
-        GraphView graph = (GraphView) findViewById(R.id.graph);
-
-        dataPoints = new DataPoint[answers.size()];
-        for(int i=0; i<answers.size(); i++){
-            double xPos = Double.parseDouble((answers.get(i).sentTime));
-            int yPos = Integer.parseInt(answers.get(i).value);
-            dataPoints[i] = new DataPoint(xPos, yPos);
-            Log.d("안되나",Double.toString(xPos));
-        }
-
-        //PointsGraphSeries<DataPoint>series=new PointsGraphSeries<DataPoint>(dataPoints);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(dataPoints);
-        // graph.getViewport().setMinX(1);
-        // graph.getViewport().setMaxX(24);
-        //  graph.getViewport().setMinY(1);
-        //  graph.getViewport().setMaxY(100);
-        // graph.getViewport().setXAxisBoundsManual(true);
-        // graph.getViewport().setYAxisBoundsManual(true);
-        //series.setCustomPaint(paint);
-        series.setColor(Color.BLUE);
-        graph.addSeries(series);
 
         valDatabase.child("Analyze").addValueEventListener(new ValueEventListener() {
             @Override
@@ -168,6 +171,15 @@ public class Graph_activity extends AppCompatActivity {
                     }
 
                 });
+            }
+        });
+
+        backToMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

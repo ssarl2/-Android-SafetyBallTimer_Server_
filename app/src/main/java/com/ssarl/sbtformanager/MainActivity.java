@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         graphbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),TestActivity.class);
+                Intent intent = new Intent(getApplicationContext(),Graph_activity.class);
                 startActivity(intent);
 
             }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -52,6 +53,7 @@ public class SpinnerAdapter extends BaseAdapter {
             int que_num = data.get(position);
             current_que_num = que_num;
             ((TextView)view.findViewById(R.id.spinnerText)).setText(Integer.toString(que_num));
+            ImageView arrow_img = (ImageView)view.findViewById(R.id.arrow_img);
         }
 
         return view;

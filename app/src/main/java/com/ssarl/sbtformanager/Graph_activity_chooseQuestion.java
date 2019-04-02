@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
@@ -30,6 +32,7 @@ public class Graph_activity_chooseQuestion extends AppCompatActivity {
         analyzes = (ArrayList<Analyze>)intent.getSerializableExtra("aalyze_data");
         ArrayList<EachValue> values = new ArrayList<EachValue>();
         values = (ArrayList<EachValue>)intent.getSerializableExtra("values");
+        Button backbtn = findViewById(R.id.backbtn);
 
         Log.d("문제 번호", Integer.toString(que_num));
         Log.d("사이즈", Integer.toString(analyzes.size()));
@@ -52,5 +55,14 @@ public class Graph_activity_chooseQuestion extends AppCompatActivity {
         graph.getViewport().setMinY(0);
         graph.getViewport().setMaxY(100);
         series.setShape(PointsGraphSeries.Shape.POINT);
+
+        backbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Graph_activity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 }

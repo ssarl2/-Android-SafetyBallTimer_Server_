@@ -11,4 +11,10 @@
         android:id="@+id/graph"
         android:background="@drawable/layout_style" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/backbtn"
+        android:text="Back"/>
+
 </LinearLayout>
