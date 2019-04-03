@@ -32,7 +32,7 @@ public class MakeQuestionsActivity extends AppCompatActivity {
         finish_btn.setOnClickListener(new View.OnClickListener() { // Finish 버튼 누를 시
             @Override
             public void onClick(View view) {
-                if(mRef.child("Questions").getKey() != null){ // Question 키가 존재할 시
+
                     mRef.child("Questions").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -69,7 +69,7 @@ public class MakeQuestionsActivity extends AppCompatActivity {
 
                         }
                     });
-                }
+
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }

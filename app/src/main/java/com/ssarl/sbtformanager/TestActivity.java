@@ -96,8 +96,8 @@ public class TestActivity extends AppCompatActivity {
 
             for(int k=0; k<answers.size();k++)
             {
-                if(j==Integer.parseInt(answers.get(k).questionNum)){
-                    sumArr[j]=sumArr[j]+Integer.parseInt(answers.get(k).value);
+                if(j==answers.get(k).questionNum){
+                    sumArr[j]=sumArr[j]+answers.get(k).value;
                     count[j]=count[j]+count2[j];
                     count2[j]=count2[j]+1;
 

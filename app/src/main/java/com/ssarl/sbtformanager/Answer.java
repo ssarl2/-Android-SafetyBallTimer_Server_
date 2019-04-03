@@ -3,25 +3,25 @@ package com.ssarl.sbtformanager;
 import android.support.annotation.NonNull;
 
 public class Answer implements Comparable<Answer> {
-    public String questionNum;
-    public String sentTime;
-    public String value;
+    public int questionNum;
+    public int sentTime;
+    public int value;
 
     public Answer(){
-        questionNum = "empty";
-        sentTime = "empty";
-        value = "empty";
+        questionNum = 0;
+        sentTime =0 ;
+        value = 0;
     }
-    public Answer(String questionNum, String sentTime, String value){
+    public Answer(int questionNum, int sentTime, int value){
         this.questionNum = questionNum;
-        this.sentTime = "time";
+        this.sentTime = 0;
         this.value = value;
     }
 
     @Override
     public int compareTo(@NonNull Answer answer) {
-        int compareTime = Integer.parseInt(((Answer)answer).sentTime);
+        int compareTime = ((Answer)answer).sentTime;
 
-        return Integer.parseInt(this.sentTime) - compareTime;
+        return this.sentTime - compareTime;
     }
 }

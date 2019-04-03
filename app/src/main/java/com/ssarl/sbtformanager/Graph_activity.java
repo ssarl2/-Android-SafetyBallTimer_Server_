@@ -61,41 +61,47 @@ public class Graph_activity extends AppCompatActivity {
         valDatabase = FirebaseDatabase.getInstance().getReference();
 
         // START Get all token from Firebase server
-        if (valDatabase.child("Answers").getKey() != null) {// 유저 존재여부 확인
             valDatabase.child("Answers").addListenerForSingleValueEvent(new ValueEventListener() {
-
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        Answer answer = snapshot.getValue(Answer.class);
-                        answers.add(answer);
-                        //Log.d("Graph_activity 데이터베이스", answer.questionNum);
+                    if(dataSnapshot.exists()){ // 유저 존재여부 확인
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            Answer answer = snapshot.getValue(Answer.class);
+                            answers.add(answer);
+                            //Log.d("Graph_activity 데이터베이스", answer.questionNum);
+                        }
+                        //listviewAdapter.notifyDataSetChanged(); // 리스트뷰 갱신 ( 이 코드가 있어야 데이터베이스를 기준으로 둔 리스트뷰를 볼 수 있음. )
+                        GraphView graph = (GraphView) findViewById(R.id.graph);
+
+                        DataPoint[] dataPoints = new DataPoint[answers.size()];
+                        Collections.sort(answers);
+
+                        for(int i=0; i<answers.size(); i++){
+                            int xPos = answers.get(i).sentTime/60;
+                            int yPos = answers.get(i).value;
+                            dataPoints[i] = new DataPoint(xPos, yPos);
+
+                            Log.d("안되나",Double.toString(xPos));
+                        }
+                        BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(dataPoints);
+                        series.resetData(dataPoints);
+                        graph.getViewport().setMinX(0);
+                        graph.getViewport().setMaxX(24);
+                        graph.getViewport().setMinY(0);
+                        graph.getViewport().setMaxY(100);
+                        graph.getViewport().setXAxisBoundsManual(true);
+                        graph.getViewport().setYAxisBoundsManual(true);
+                        series.setColor(Color.BLUE);
+                        graph.addSeries(series);
                     }
-                    //listviewAdapter.notifyDataSetChanged(); // 리스트뷰 갱신 ( 이 코드가 있어야 데이터베이스를 기준으로 둔 리스트뷰를 볼 수 있음. )
-                    GraphView graph = (GraphView) findViewById(R.id.graph);
-
-                    DataPoint[] dataPoints = new DataPoint[answers.size()];
-                    Collections.sort(answers);
-
-                    for(int i=0; i<answers.size(); i++){
-                        int xPos = Integer.parseInt((answers.get(i).sentTime))/60;
-                        int yPos = Integer.parseInt(answers.get(i).value);
-                        dataPoints[i] = new DataPoint(xPos, yPos);
-
-                        Log.d("안되나",Double.toString(xPos));
+                    else{
+                        Toast.makeText(getApplicationContext(), "There is no one answer so it can't show graph.", Toast.LENGTH_SHORT).toString();
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
-                    BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(dataPoints);
-                    series.resetData(dataPoints);
-                    graph.getViewport().setMinX(0);
-                    graph.getViewport().setMaxX(24);
-                    graph.getViewport().setMinY(0);
-                    graph.getViewport().setMaxY(100);
-                    graph.getViewport().setXAxisBoundsManual(true);
-                    graph.getViewport().setYAxisBoundsManual(true);
-                    series.setColor(Color.BLUE);
-                    graph.addSeries(series);
+
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -104,7 +110,6 @@ public class Graph_activity extends AppCompatActivity {
 
             //listviewAdapter = new ListviewActivity(this, R.layout.custom_list);
             //listView.setAdapter(listviewAdapter);
-        }
 
         valDatabase.child("Analyze").addValueEventListener(new ValueEventListener() {
             @Override
