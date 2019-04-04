@@ -1,6 +1,8 @@
 package com.ssarl.sbtformanager;
 
 import android.content.Intent;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -45,11 +47,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     List<String> tokenHouse = new ArrayList<>();
     List<Question> questionList = new ArrayList<>(); // Question 클래스를 담을 List 변수 생성
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        btnn = (Button) findViewById(R.id.btn);
+        btnn.setEnabled(false);
 
+        Toast.makeText(getApplicationContext(), "Loading...", Toast.LENGTH_LONG).show();
+        CountDownTimer countDownTimer = new CountDownTimer(3000, 1000) {
+            @Override
+            public void onTick(long l) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                btnn.setEnabled(true);
+                Toast.makeText(getApplicationContext(), "Complete to get Data", Toast.LENGTH_SHORT).show();
+            }
+        }.start();
 
         // START Get Data from Firebase server
         tokenDatabase = FirebaseDatabase.getInstance().getReference();
@@ -108,13 +126,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // END Get Get Question from Firebase server
         // END Get Data from Firebase server
 
-        btnn = (Button) findViewById(R.id.btn);
         graphbtn=(Button)findViewById(R.id.button);
         makeQuestion = (Button)findViewById(R.id.btn2);
         ett1 = (EditText) findViewById(R.id.et1);
-
         tvv1 = (TextView) findViewById(R.id.tv1);
-
 
         btnn.setOnClickListener(this);
 
@@ -149,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(validTime.equals("")) return; // 빈 시간이 들어갔을 경우 무효화 처리
 
         tvv1.setText(question);
-       // tvv2.setText(validTime);
+        // tvv2.setText(validTime);
 
         (new Thread(this)).start();
     }
