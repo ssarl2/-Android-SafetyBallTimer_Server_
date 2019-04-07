@@ -93,6 +93,7 @@ public class Graph_activity extends AppCompatActivity {
                 graph.getViewport().setMaxY(100);
                 graph.getViewport().setXAxisBoundsManual(true);
                 graph.getViewport().setYAxisBoundsManual(true);
+                graph.setTitle("Answer average");
                 series.setColor(Color.BLUE);
                 graph.addSeries(series);
             }
