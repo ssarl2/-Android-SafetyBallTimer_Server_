@@ -60,57 +60,6 @@ public class Graph_activity extends AppCompatActivity {
         // START Get Data from Firebase server
         valDatabase = FirebaseDatabase.getInstance().getReference();
 
-        // START Get all token from Firebase server
-            valDatabase.child("Answers").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.exists()){ // 유저 존재여부 확인
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            Answer answer = snapshot.getValue(Answer.class);
-                            answers.add(answer);
-                            //Log.d("Graph_activity 데이터베이스", answer.questionNum);
-                        }
-                        //listviewAdapter.notifyDataSetChanged(); // 리스트뷰 갱신 ( 이 코드가 있어야 데이터베이스를 기준으로 둔 리스트뷰를 볼 수 있음. )
-                        GraphView graph = (GraphView) findViewById(R.id.graph);
-
-                        DataPoint[] dataPoints = new DataPoint[answers.size()];
-                        Collections.sort(answers);
-
-                        for(int i=0; i<answers.size(); i++){
-                            int xPos = answers.get(i).sentTime/60;
-                            int yPos = answers.get(i).value;
-                            dataPoints[i] = new DataPoint(xPos, yPos);
-
-                            Log.d("안되나",Double.toString(xPos));
-                        }
-                        BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(dataPoints);
-                        series.resetData(dataPoints);
-                        graph.getViewport().setMinX(0);
-                        graph.getViewport().setMaxX(24);
-                        graph.getViewport().setMinY(0);
-                        graph.getViewport().setMaxY(100);
-                        graph.getViewport().setXAxisBoundsManual(true);
-                        graph.getViewport().setYAxisBoundsManual(true);
-                        series.setColor(Color.BLUE);
-                        graph.addSeries(series);
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(), "There is no one answer so it can't show graph.", Toast.LENGTH_SHORT).toString();
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-
-            //listviewAdapter = new ListviewActivity(this, R.layout.custom_list);
-            //listView.setAdapter(listviewAdapter);
-
         valDatabase.child("Analyze").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -119,6 +68,33 @@ public class Graph_activity extends AppCompatActivity {
                     data.add(analyze.que_num);
                     analyzes.add(analyze);
                 }
+
+                GraphView graph = (GraphView) findViewById(R.id.graph);
+
+
+                DataPoint[] dataPoints = new DataPoint[analyzes.size()];
+                //Collections.sort(answers);
+
+                Log.d("안되나",Integer.toString(analyzes.size()));
+                for(int i=0; i<analyzes.size(); i++){
+                    int xPos = analyzes.get(i).que_num;
+                    int yPos = 0;
+                    if(analyzes.get(i).count > 0) {
+                        yPos = analyzes.get(i).total_value / analyzes.get(i).count; // 한 문제의 총 답변 값 / 답변 수
+                    }
+                    dataPoints[i] = new DataPoint(xPos, yPos);
+                    Log.d("안되나",Double.toString(xPos));
+                }
+                BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(dataPoints);
+                series.resetData(dataPoints);
+                graph.getViewport().setMinX(0);
+                graph.getViewport().setMaxX(analyzes.size());
+                graph.getViewport().setMinY(0);
+                graph.getViewport().setMaxY(100);
+                graph.getViewport().setXAxisBoundsManual(true);
+                graph.getViewport().setYAxisBoundsManual(true);
+                series.setColor(Color.BLUE);
+                graph.addSeries(series);
             }
 
             @Override
