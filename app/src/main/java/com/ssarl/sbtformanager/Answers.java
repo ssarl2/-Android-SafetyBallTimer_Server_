@@ -1,19 +1,20 @@
 package com.ssarl.sbtformanager;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
-/**
- * Created by Wonhak on 2019-03-31.
- */
+public class Answers implements Serializable {
 
-public class Analyze implements Serializable{
+    public ArrayList<EachValue> eachValue;
     public int que_num;
     public int total_value;
     public int count;
 
-    public Analyze(){
+    public Answers(){
+        eachValue = new ArrayList<>();
         que_num = 0;
         total_value = 0;
         count = 0;
     }
+
 }

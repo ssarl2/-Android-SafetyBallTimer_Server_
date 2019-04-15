@@ -42,13 +42,13 @@ public class MakeQuestionsActivity extends AppCompatActivity {
                                     index++;
                                 }
                                 Question question = new Question(); // Question 클래스 초기화
-                                question.question_num = Integer.toString(index);  // question_num 에 index 저장
+                                question.question_num = String.valueOf(index);  // question_num 에 index 저장
                                 question.question_content = edit_question.getText().toString();
                                 mRef.child("Questions").push().setValue(question); // 데이터 삽입
-                                Analyze analyze = new Analyze();
-                                analyze.que_num = index;
-                                analyze.count = 0;
-                                mRef.child("Analyze").push().setValue(analyze);
+                                Answers answers = new Answers();
+                                answers.que_num = index;
+                                answers.count = 0;
+                                mRef.child("Analyze").push().setValue(answers);
                                 finish();
                             }
                             else{
@@ -56,10 +56,10 @@ public class MakeQuestionsActivity extends AppCompatActivity {
                                 question.question_num = "0";
                                 question.question_content = edit_question.getText().toString();
                                 mRef.child("Questions").push().setValue(question);
-                                Analyze analyze = new Analyze();
-                                analyze.que_num = 0;
-                                analyze.count = 0;
-                                mRef.child("Analyze").push().setValue(analyze);
+                                Answers answers = new Answers();
+                                answers.que_num = 0;
+                                answers.count = 0;
+                                mRef.child("Analyze").push().setValue(answers);
                             }
 
                         }

@@ -7,10 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.PointsGraphSeries;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -19,7 +16,9 @@ import java.util.ArrayList;
  */
 
 public class Graph_activity_chooseQuestion extends AppCompatActivity {
-    DataPoint[] dataPoints;
+//    DataPoint[] dataPoints;
+
+    private ListView listView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,34 +26,20 @@ public class Graph_activity_chooseQuestion extends AppCompatActivity {
         setContentView(R.layout.activity_graph_activity_choosequestion);
 
         Intent intent = getIntent();
-        int que_num = intent.getExtras().getInt("que_num");
-        ArrayList<Analyze> analyzes = new ArrayList<Analyze>();
-        analyzes = (ArrayList<Analyze>)intent.getSerializableExtra("aalyze_data");
-        ArrayList<EachValue> values = new ArrayList<EachValue>();
-        values = (ArrayList<EachValue>)intent.getSerializableExtra("values");
+        ArrayList<Answers> answersArray = (ArrayList<Answers>) intent.getSerializableExtra("answersArray");
+
+//        Log.e("count: ", answersArray.get(0).count+"");
+//        Log.e("que_num: ", answersArray.get(0).que_num+"");
+//        Log.e("total: ", answersArray.get(0).total_value+"");
+//        Log.e("value: ", answersArray.get(0).eachValue.get(0).value+"");
+//        Log.e("time: ", answersArray.get(0).eachValue.get(0).sentTime);
+
+
+        Log.i("graph.size", String.valueOf(answersArray.get(0).eachValue.size()));
         Button backbtn = findViewById(R.id.backbtn);
-
-        Log.d("문제 번호", Integer.toString(que_num));
-        Log.d("사이즈", Integer.toString(analyzes.size()));
-        Log.d("시간 사이즈", Integer.toString(values.size()));
-
-        GraphView graph = (GraphView) findViewById(R.id.graph);
-        dataPoints = new DataPoint[values.size()];
-        for(int i=0; i<values.size(); i++){
-            int xPos = Integer.parseInt(values.get(i).senttime);
-            int yPos = values.get(i).value;
-            dataPoints[i] = new DataPoint(xPos, yPos);
-        }
-        PointsGraphSeries<DataPoint> series = new PointsGraphSeries<>(dataPoints);
-        graph.addSeries(series);
-        graph.setTitle("Question "+Integer.toString(que_num));
-        graph.getViewport().setXAxisBoundsManual(true);
-        graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(24);
-        graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setMinY(0);
-        graph.getViewport().setMaxY(100);
-        series.setShape(PointsGraphSeries.Shape.POINT);
+        listView = (ListView)findViewById(R.id.listview);
+        TimeValueListviewAdapter timeValueListviewAdapter = new TimeValueListviewAdapter(answersArray);
+        listView.setAdapter(timeValueListviewAdapter);
 
         backbtn.setOnClickListener(new View.OnClickListener() {
             @Override
