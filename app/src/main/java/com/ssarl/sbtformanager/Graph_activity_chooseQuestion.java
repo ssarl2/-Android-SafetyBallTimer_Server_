@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -26,6 +27,7 @@ public class Graph_activity_chooseQuestion extends AppCompatActivity {
         setContentView(R.layout.activity_graph_activity_choosequestion);
 
         Intent intent = getIntent();
+
         ArrayList<Answers> answersArray = (ArrayList<Answers>) intent.getSerializableExtra("answersArray");
 
 //        Log.e("count: ", answersArray.get(0).count+"");
@@ -38,6 +40,7 @@ public class Graph_activity_chooseQuestion extends AppCompatActivity {
         Log.i("graph.size", String.valueOf(answersArray.get(0).eachValue.size()));
         Button backbtn = findViewById(R.id.backbtn);
         listView = (ListView)findViewById(R.id.listview);
+
         TimeValueListviewAdapter timeValueListviewAdapter = new TimeValueListviewAdapter(answersArray);
         listView.setAdapter(timeValueListviewAdapter);
 
@@ -50,4 +53,6 @@ public class Graph_activity_chooseQuestion extends AppCompatActivity {
             }
         });
     }
+
+
 }

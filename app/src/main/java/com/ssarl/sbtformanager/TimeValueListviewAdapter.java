@@ -2,6 +2,7 @@ package com.ssarl.sbtformanager;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.PointsGraphSeries;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.StringTokenizer;
 
@@ -21,9 +23,11 @@ public class TimeValueListviewAdapter extends BaseAdapter {
 
     DataPoint[] dataPoint;
     ArrayList<Answers> answersArray;
+    ArrayList<Integer> ids;
 
     public TimeValueListviewAdapter(ArrayList<Answers> answersArray) {
         this.answersArray = answersArray;
+        ids = new ArrayList<>(answersArray.size());
     }
     @Override
     public int getCount() {
@@ -45,6 +49,23 @@ public class TimeValueListviewAdapter extends BaseAdapter {
     }
 
     @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        final Context context = parent.getContext();
+
+        if (convertView == null) {
+
+            ids.add(position, ViewCompat.generateViewId());
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.custom_listview, parent, false);
+
+        }
+
+        // ...
+
+
+    /*
+    @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
 
         final Context context = viewGroup.getContext();
@@ -53,10 +74,11 @@ public class TimeValueListviewAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.custom_listview, viewGroup, false);
         }
-
+*/
 //        Random rnd = new Random();
 
-        dataPoint = new DataPoint[24];
+        int pointArraySize = answersArray.get(position).eachValue.size(); //you need to match the dataPoint size to match number of values.
+        dataPoint = new DataPoint[pointArraySize];
 //        for (int i = 0; i < 24; i++) {
 //            int xPos = i;
 //            int yPos = rnd.nextInt(100) + 0;
@@ -64,26 +86,36 @@ public class TimeValueListviewAdapter extends BaseAdapter {
 //        }
 
         Log.i("Position: ", String.valueOf(position));
+        Log.i("size: ", String.valueOf(answersArray.get(position).eachValue.size()));
+        for (int i = 0; i < answersArray.get(position).eachValue.size(); i++) {
 
-            for (int i = 0; i < answersArray.get(position).eachValue.size(); i++) {
-                Log.i("size: ", String.valueOf(answersArray.get(position).eachValue.size()));
-                String str = answersArray.get(position).eachValue.get(i).sentTime;
-                StringTokenizer st = new StringTokenizer(str,":-");
 
-                int xPos = Integer.parseInt(st.nextToken());
-                Log.i("TimeValue: ", String.valueOf(xPos));
-                int yPos = answersArray.get(position).eachValue.get(i).value;
-                dataPoint[position] = new DataPoint(xPos, yPos);
-            }
+            //using the hour as Xpos value in the PointsGraphSeries won't work because the answers are from different days so order is wrong.
+            String str = answersArray.get(position).eachValue.get(i).sentTime;
+            StringTokenizer st = new StringTokenizer(str,":-");
 
-            if(dataPoint == null){
-                dataPoint[position] = new DataPoint(0,0);
-            }
+            //sort the hours in correct order
 
-        GraphView graph = (GraphView) view.findViewById(R.id.graph);
+
+//            int xPos = Integer.parseInt(st.nextToken());
+//            Log.i("TimeValue: ", String.valueOf(xPos));
+            int xPos = i;
+
+            int yPos = answersArray.get(position).eachValue.get(i).value;
+            dataPoint[i] = new DataPoint(xPos, yPos);
+
+        }
+
+        if(dataPoint == null){
+            dataPoint[position] = new DataPoint(0,0);
+        }
+
+
+
+        GraphView graph = (GraphView) convertView.findViewById(R.id.graph);
         GridLabelRenderer gridLabelRenderer = graph.getGridLabelRenderer();
-        PointsGraphSeries<DataPoint> series = new PointsGraphSeries<>(dataPoint);
 
+        PointsGraphSeries<DataPoint> series = new PointsGraphSeries<>(dataPoint);
         series.setColor(Color.BLUE);
         series.setShape(PointsGraphSeries.Shape.POINT);
         series.setSize(6);
@@ -101,9 +133,12 @@ public class TimeValueListviewAdapter extends BaseAdapter {
         graph.getViewport().setMinY(0);
         graph.getViewport().setMaxY(100);
         graph.getViewport().setScrollable(true);
+        graph.removeAllSeries();
         graph.addSeries(series);
 
-        return view;
+        //return view;
+        return convertView;
+
     }
 
 }

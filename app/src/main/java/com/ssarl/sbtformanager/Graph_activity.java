@@ -27,9 +27,9 @@ public class Graph_activity extends AppCompatActivity {
     private ListView listView;
     public DatabaseReference valDatabase;
     int que_num;
-//    private ArrayList<Answer> answers = new ArrayList<>();
+    //    private ArrayList<Answer> answers = new ArrayList<>();
 //    Answers answers = new Answers();
-static int x = 0 ;
+    static int x = 0 ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +37,7 @@ static int x = 0 ;
         setContentView(R.layout.activity_graph_activity);
 
         final ArrayList<Answers> answersArrayList = new ArrayList<>();
+        final ArrayList<Answers> tempArrayList = new ArrayList<>();
 //        final ArrayList<Analyze> analyzeArray = new ArrayList<>();
         final ArrayList<EachValue> eachValueArrayList = new ArrayList<>();
         final ArrayList<String> id = new ArrayList<>();
@@ -51,8 +52,12 @@ static int x = 0 ;
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.e("and next.: ", "something to do........");
+                final ArrayList<String> keys = new ArrayList<String>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     final Answers answers = snapshot.getValue(Answers.class);
+
+
+
 
 //                    Log.e("count: ", answers.count+"");
 //                    Log.e("que_num: ", answers.que_num+"");
@@ -68,58 +73,78 @@ static int x = 0 ;
 //                    id.add(snapshot.getKey());
                     Log.i("analyze.count", answers.count + "");
                     if (answers.count > 0) {
+                        keys.add(snapshot.getKey());
+                        tempArrayList.add(answers);
 
-                        // START Get inner data
-                        databaseReference.child("Analyze").child(snapshot.getKey()).child("EachValue").addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                Log.e("Enter", "---------");
-                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                    EachValue eachValueData = snapshot.getValue(EachValue.class);
-
-                                    EachValue eachValue = new EachValue();
-
-                                    eachValue.sentTime = eachValueData.sentTime;
-                                    eachValue.value = eachValueData.value;
-
-                                    eachValueArrayList.add(eachValueData);
-
-                                }
-
-//                                Answers answersBox = new Answers();
-
-                                answers.eachValue = eachValueArrayList; // I can't input data to here
-
-                                for (int i = 0; i < eachValueArrayList.size(); i++) {
-                                    Log.i("eachValue-repeatTime", eachValueArrayList.get(i).sentTime);
-                                    Log.i("eachValue-repeatTime", eachValueArrayList.get(i).value+"");
-                                }
-                                answersArrayList.add(answers);
-//                                Log.i("eachValue-repeatTime", answersArrayList.get(0).eachValue.get(0).sentTime);
-
-                                eachValueArrayList.clear();
-
-//                                for (int i = 0; i < answersArrayList.size(); i++) {
-//                                    Log.i("eachValue-repeatTime", answersArrayList.get(x).eachValue.get(i).sentTime);
-//                                    Log.i("eachValue-repeatTime", answersArrayList.get(x).eachValue.get(i).value+"");
-//                                }
-                              x++;
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                            }
-                        });
-                        // END Get inner data
 
                     } else {
                         Log.i("onDataChange: ", "Else, Access");
-                        answersArrayList.add(answers);
+                        keys.add("empty");
+                        tempArrayList.add(answers);
+                        //answersArrayList.add(answers);
 
                     }
 
 
                 }
+                // START Get inner data
+
+                for(int i = 0; i < keys.size(); i++) {
+
+                    final int count = i;
+                    //answers with EachValue are looped
+
+                    databaseReference.child("Analyze").child(keys.get(i)).child("EachValue").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Log.e("Enter", "---------");
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                EachValue eachValueData = snapshot.getValue(EachValue.class);
+
+                                EachValue eachValue = new EachValue();
+
+                                eachValue.sentTime = eachValueData.sentTime;
+                                eachValue.value = eachValueData.value;
+
+                                eachValueArrayList.add(eachValueData);
+
+                            }
+
+//                                Answers answersBox = new Answers();
+                            //tempArrayList.get(count).eachValue.clear();
+                            //tempArrayList.get(count).eachValue = eachValueArrayList;  // I can't input data to here
+
+                            for(EachValue eachValue : eachValueArrayList) {
+                                tempArrayList.get(count).eachValue.add(eachValue);
+
+                            }
+                            answersArrayList.add(tempArrayList.get(count));
+
+                            for (int i = 0; i < eachValueArrayList.size(); i++) {
+                                Log.i("eachValue-repeatTime", eachValueArrayList.get(i).sentTime);
+                                Log.i("eachValue-repeatTime", eachValueArrayList.get(i).value+"");
+                            }
+                            //answersArrayList.add(tempArrayList.get(j));
+//                                Log.i("eachValue-repeatTime", answersArrayList.get(0).eachValue.get(0).sentTime);
+
+                            eachValueArrayList.clear(); //the eachValueArrayList.clear() command is clearing the eachValue from inside the answersArrayList also
+
+//                                for (int i = 0; i < answersArrayList.size(); i++) {
+//                                    Log.i("eachValue-repeatTime", answersArrayList.get(x).eachValue.get(i).sentTime);
+//                                    Log.i("eachValue-repeatTime", answersArrayList.get(x).eachValue.get(i).value+"");
+//                                }
+                            x++;
+                        }
+
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        }
+                    });
+
+                    // END Get inner data
+                }
+
 
 //                    Log.e("count: ", answersArrayList.get(0).count+"");
 //                    Log.e("que_num: ", answersArrayList.get(0).que_num+"");
@@ -134,10 +159,8 @@ static int x = 0 ;
 
             }
 
+
         });
-
-
-
 
         GraphView graph = (GraphView) findViewById(R.id.graph);
 
@@ -172,7 +195,7 @@ static int x = 0 ;
                 final Intent intent = new Intent(getApplicationContext(), Graph_activity_chooseQuestion.class);
                 Log.i("graph.activy.size", String.valueOf(answersArrayList.get(0).eachValue.size()));
 
-//                intent.putExtra("answersArray", answersArray);
+                intent.putExtra("answersArray", answersArrayList);
 
                 startActivity(intent);
                 finish();
