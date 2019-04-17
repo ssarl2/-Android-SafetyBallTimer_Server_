@@ -31,7 +31,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, Runnable {
 
     private static final String FCM_MESSAGE_URL = "https://fcm.googleapis.com/fcm/send";
-    private static final String SERVER_KEY = "AAAADuGboLA:APA91bFhMrnBhEVnb_qIHEIxbHk-aDKf05zYSyk-dLu7GlPK0OoGuQrTLDERtuyF1Ak2xcdJC5nQtGFzb_45zRyWsAC8xh8Ayn6n_kDsjGZFDVLx99bowzu77qvX5uPKlwYf9wkzqr1s";
+    private static final String SERVER_KEY = "AAAA87HPu5I:APA91bEU-3xSr0Gl6UjZa1KdTuyRW3Yk8_PaCBLX97pLE7NnitsEyUvMwMJ67oXBdUDnNClrnYxxCmZkz9Ai3fy2X43WP0EGgw_0nu-YG49lnEjPmjnrs17YqG3AwZkxcTFHKL4zFxC_";
     private DatabaseReference tokenDatabase;
     private DatabaseReference questionsDatabase;
     int tokenCount = 0;

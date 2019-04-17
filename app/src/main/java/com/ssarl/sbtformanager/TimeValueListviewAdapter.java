@@ -16,6 +16,7 @@ import com.jjoe64.graphview.series.PointsGraphSeries;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 import java.util.StringTokenizer;
 
@@ -85,6 +86,9 @@ public class TimeValueListviewAdapter extends BaseAdapter {
 //            dataPoint[i] = new DataPoint(xPos, yPos);
 //        }
 
+        ArrayList<Integer> tempxPos = new ArrayList<>();
+        ArrayList<Integer> tempyPos = new ArrayList<>();
+
         Log.i("Position: ", String.valueOf(position));
         Log.i("size: ", String.valueOf(answersArray.get(position).eachValue.size()));
         for (int i = 0; i < answersArray.get(position).eachValue.size(); i++) {
@@ -97,13 +101,22 @@ public class TimeValueListviewAdapter extends BaseAdapter {
             //sort the hours in correct order
 
 
-//            int xPos = Integer.parseInt(st.nextToken());
+            tempxPos.add(Integer.parseInt(st.nextToken()));
+//            tempyPos.add(answersArray.get(position).eachValue.get(i).value);
 //            Log.i("TimeValue: ", String.valueOf(xPos));
-            int xPos = i;
 
+//            int xPos = i;
+//            int yPos = answersArray.get(position).eachValue.get(i).value;
+//            dataPoint[i] = new DataPoint(xPos, yPos);
+
+        }
+
+        Collections.sort(tempxPos);
+
+        for (int i = 0; i < tempxPos.size(); i++) {
+            int xPos = tempxPos.get(i);
             int yPos = answersArray.get(position).eachValue.get(i).value;
             dataPoint[i] = new DataPoint(xPos, yPos);
-
         }
 
         if(dataPoint == null){
