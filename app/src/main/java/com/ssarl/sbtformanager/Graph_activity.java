@@ -20,7 +20,9 @@ import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class Graph_activity extends AppCompatActivity {
 
@@ -103,13 +105,17 @@ public class Graph_activity extends AppCompatActivity {
 
                                 EachValue eachValue = new EachValue();
 
-                                eachValue.sentTime = eachValueData.sentTime;
+                                StringTokenizer st = new StringTokenizer(eachValueData.sentTime,":");
+
+                                Log.i( "String TokenNi: ",eachValue.sentTime);
+                                eachValue.sentTime = st.nextToken();
                                 eachValue.value = eachValueData.value;
 
                                 eachValueArrayList.add(eachValueData);
 
                             }
 
+                            Collections.sort(eachValueArrayList);
 //                                Answers answersBox = new Answers();
                             //tempArrayList.get(count).eachValue.clear();
                             //tempArrayList.get(count).eachValue = eachValueArrayList;  // I can't input data to here
