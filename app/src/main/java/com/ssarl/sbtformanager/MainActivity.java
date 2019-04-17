@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int questionCount = 0;
     int randomNumberForQuestions = 0;
     int random;
-    Button btnn, makeQuestion,graphbtn;
+    ImageButton btnn, makeQuestion,graphbtn;
     TextView tvv1, tvv2;
     EditText ett1, ett2;
     String questionNum;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btnn = (Button) findViewById(R.id.btn);
+        btnn = (ImageButton) findViewById(R.id.btn);
         btnn.setEnabled(false);
 
         Toast.makeText(getApplicationContext(), "Loading...", Toast.LENGTH_LONG).show();
@@ -126,8 +127,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // END Get Get Question from Firebase server
         // END Get Data from Firebase server
 
-        graphbtn=(Button)findViewById(R.id.button);
-        makeQuestion = (Button)findViewById(R.id.btn2);
+        graphbtn=(ImageButton)findViewById(R.id.button);
+        makeQuestion = (ImageButton)findViewById(R.id.btn2);
         ett1 = (EditText) findViewById(R.id.et1);
         tvv1 = (TextView) findViewById(R.id.tv1);
 

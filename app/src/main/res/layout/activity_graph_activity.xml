@@ -4,37 +4,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="150dp"
     android:orientation="vertical"
-    tools:context=".Graph_activity">
+    tools:context=".Graph_activity"
+    android:background="@drawable/back3">
 
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/graph"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@drawable/layout_style" />
+    <LinearLayout
+        android:layout_width="350dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="200dp"
+        android:orientation="vertical"
+        android:layout_gravity="center">
 
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@drawable/spinner_spinner1"
-        android:dropDownVerticalOffset="50dp"
-        android:gravity="center"
-        android:popupBackground="@android:color/transparent"
-        android:spinnerMode="dialog"
-        android:theme="@style/ThemeOverlay.AppCompat.Light"></Spinner>
+        <com.jjoe64.graphview.GraphView
+            android:id="@+id/graph"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/layout_style" />
 
-    <Button
-        android:id="@+id/question_graph"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Question Graph" />
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/spinner_spinner1"
+            android:dropDownVerticalOffset="50dp"
+            android:gravity="center"
+            android:popupBackground="@android:color/transparent"
+            android:spinnerMode="dialog"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"></Spinner>
 
-    <Button
-        android:id="@+id/backToMain"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Back" />
+        <ImageButton
+            android:id="@+id/question_graph"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/eachgraph"
+            android:text="Question Graph" />
+
+        <ImageButton
+            android:id="@+id/backToMain"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:background="@drawable/backpu"
+            android:layout_gravity="center"/>
+    </LinearLayout>
 
 </LinearLayout>
+

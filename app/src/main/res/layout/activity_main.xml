@@ -63,23 +63,28 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn"
-                android:layout_width="172dp"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/send"
                 android:text="Send Notification" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn2"
-                android:layout_width="154dp"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/makeque"
                 android:text="makeQuestion" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/button"
-                android:layout_width="155dp"
-                android:layout_height="match_parent"
-                android:text="Average graph" />
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:text="Average graph"
+                android:background="@drawable/average"/>
         </LinearLayout>
 
         <LinearLayout

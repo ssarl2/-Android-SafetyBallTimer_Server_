@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,8 +23,8 @@ public class MakeQuestionsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_questions);
 
-        Button finish_btn = (Button)findViewById(R.id.finish);
-        Button cancel_btn = (Button)findViewById(R.id.cancel);
+        ImageButton finish_btn = (ImageButton)findViewById(R.id.finish);
+        ImageButton cancel_btn = (ImageButton)findViewById(R.id.cancel);
         final EditText edit_question = (EditText)findViewById(R.id.question);
 
         final FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();

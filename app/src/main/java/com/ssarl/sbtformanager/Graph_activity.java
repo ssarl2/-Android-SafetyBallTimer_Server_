@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -41,8 +42,8 @@ public class Graph_activity extends AppCompatActivity {
 //        final ArrayList<Analyze> analyzeArray = new ArrayList<>();
         final ArrayList<EachValue> eachValueArrayList = new ArrayList<>();
         final ArrayList<String> id = new ArrayList<>();
-        final Button QuestionGraph = (Button) findViewById(R.id.question_graph);
-        final Button backToMain = (Button) findViewById(R.id.backToMain);
+        final ImageButton QuestionGraph = (ImageButton) findViewById(R.id.question_graph);
+        final ImageButton backToMain = (ImageButton) findViewById(R.id.backToMain);
 
         // START Get Data from Firebase server
         final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
