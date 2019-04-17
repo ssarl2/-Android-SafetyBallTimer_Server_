@@ -20,7 +20,6 @@ public class EachValue implements Serializable, Comparable<EachValue> {
 
     @Override
     public int compareTo(EachValue eachValue) {
-
         return sentTime.compareTo(eachValue.sentTime);
     }
 }

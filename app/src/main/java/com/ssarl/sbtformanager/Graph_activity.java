@@ -108,11 +108,12 @@ public class Graph_activity extends AppCompatActivity {
 
                                 StringTokenizer st = new StringTokenizer(eachValueData.sentTime,":");
 
-                                Log.i( "String TokenNi: ",eachValue.sentTime);
+                                //Log.i( "String TokenNi: ",eachValueData.sentTime);
                                 eachValue.sentTime = st.nextToken();
                                 eachValue.value = eachValueData.value;
+                                Log.i( "String TokenNi: ",eachValue.sentTime);
 
-                                eachValueArrayList.add(eachValueData);
+                                eachValueArrayList.add(eachValue);
 
                             }
 
