@@ -30,22 +30,23 @@ public class TimeValueListviewAdapter extends BaseAdapter {
         this.answersArray = answersArray;
         ids = new ArrayList<>(answersArray.size());
     }
+
     @Override
     public int getCount() {
-        Log.e( "getCountInAdapter: ", String.valueOf(answersArray.size()));
+        Log.e("getCountInAdapter: ", String.valueOf(answersArray.size()));
         return answersArray.size();
 //        return 1;
     }
 
     @Override
     public Object getItem(int i) {
-        Log.e( "getItem: ", String.valueOf(i));
+        Log.e("getItem: ", String.valueOf(i));
         return i;
     }
 
     @Override
     public long getItemId(int i) {
-        Log.e( "getItemID: ", String.valueOf(i));
+        Log.e("getItemID: ", String.valueOf(i));
         return i;
     }
 
@@ -119,10 +120,9 @@ public class TimeValueListviewAdapter extends BaseAdapter {
 //            dataPoint[i] = new DataPoint(xPos, yPos);
 //        }
 
-        if(dataPoint == null){
-            dataPoint[position] = new DataPoint(0,0);
+        if (dataPoint == null) {
+            dataPoint[position] = new DataPoint(0, 0);
         }
-
 
 
         GraphView graph = (GraphView) convertView.findViewById(R.id.graph);
@@ -138,10 +138,10 @@ public class TimeValueListviewAdapter extends BaseAdapter {
         gridLabelRenderer.setNumHorizontalLabels(4);
         gridLabelRenderer.setNumVerticalLabels(3);
 
-        graph.setTitle("Question "+position+1);
+        graph.setTitle("Question " + (position + 1));
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(12);
+        graph.getViewport().setMaxX(24);
         graph.getViewport().setYAxisBoundsManual(true);
         graph.getViewport().setMinY(0);
         graph.getViewport().setMaxY(100);
