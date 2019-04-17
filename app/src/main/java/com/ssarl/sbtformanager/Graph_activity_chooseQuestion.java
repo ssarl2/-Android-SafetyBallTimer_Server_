@@ -37,7 +37,6 @@ public class Graph_activity_chooseQuestion extends AppCompatActivity {
 //        Log.e("value: ", answersArray.get(0).eachValue.get(0).value+"");
 //        Log.e("time: ", answersArray.get(0).eachValue.get(0).sentTime);
 
-
         Log.i("graph.size", String.valueOf(answersArray.get(0).eachValue.size()));
         ImageButton backbtn = findViewById(R.id.backbtn);
         listView = (ListView)findViewById(R.id.listview);

@@ -11,10 +11,13 @@ public class Answers implements Serializable {
     public int count;
 
     public Answers(){
-        eachValue = new ArrayList<>();
+        eachValue = new ArrayList<EachValue>();
         que_num = 0;
         total_value = 0;
         count = 0;
     }
 
+    public void addItem(EachValue data){
+        eachValue.add(data);
+    }
 }
