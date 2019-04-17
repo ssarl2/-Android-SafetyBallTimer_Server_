@@ -32,7 +32,6 @@ public class Graph_activity extends AppCompatActivity {
     int que_num;
     //    private ArrayList<Answer> answers = new ArrayList<>();
 //    Answers answers = new Answers();
-    static int x = 0 ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,26 +58,10 @@ public class Graph_activity extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     final Answers answers = snapshot.getValue(Answers.class);
 
-
-
-
-//                    Log.e("count: ", answers.count+"");
-//                    Log.e("que_num: ", answers.que_num+"");
-//                    Log.e("total: ", answers.total_value+"");
-//                    Log.i("value: ", answers.eachValue+"");
-
-//                    Log.e("value: ", answers.eachValue.get(0).value+"");
-//                    Log.e("time: ", answers.eachValue.get(0).sentTime);
-
-//                    answersArrayList.add(answers);
-
-
-//                    id.add(snapshot.getKey());
                     Log.i("analyze.count", answers.count + "");
                     if (answers.count > 0) {
                         keys.add(snapshot.getKey());
                         tempArrayList.add(answers);
-
 
                     } else {
                         Log.i("onDataChange: ", "Else, Access");
@@ -108,7 +91,6 @@ public class Graph_activity extends AppCompatActivity {
 
                                 StringTokenizer st = new StringTokenizer(eachValueData.sentTime,":");
 
-                                //Log.i( "String TokenNi: ",eachValueData.sentTime);
                                 eachValue.sentTime = st.nextToken();
                                 eachValue.value = eachValueData.value;
                                 Log.i( "String TokenNi: ",eachValue.sentTime);
@@ -133,15 +115,9 @@ public class Graph_activity extends AppCompatActivity {
                                 Log.i("eachValue-repeatTime", eachValueArrayList.get(i).value+"");
                             }
                             //answersArrayList.add(tempArrayList.get(j));
-//                                Log.i("eachValue-repeatTime", answersArrayList.get(0).eachValue.get(0).sentTime);
 
                             eachValueArrayList.clear(); //the eachValueArrayList.clear() command is clearing the eachValue from inside the answersArrayList also
 
-//                                for (int i = 0; i < answersArrayList.size(); i++) {
-//                                    Log.i("eachValue-repeatTime", answersArrayList.get(x).eachValue.get(i).sentTime);
-//                                    Log.i("eachValue-repeatTime", answersArrayList.get(x).eachValue.get(i).value+"");
-//                                }
-                            x++;
                         }
 
 
@@ -153,13 +129,6 @@ public class Graph_activity extends AppCompatActivity {
                     // END Get inner data
                 }
 
-
-//                    Log.e("count: ", answersArrayList.get(0).count+"");
-//                    Log.e("que_num: ", answersArrayList.get(0).que_num+"");
-//                    Log.e("total: ", answersArrayList.get(0).total_value+"");
-//                    Log.e("value: ", answersArrayList.get(0).eachValue.get(0).value+"");
-//                    Log.e("time: ", answersArrayList.get(0).eachValue.get(0).sentTime);
-
             }
 
             @Override
@@ -167,13 +136,11 @@ public class Graph_activity extends AppCompatActivity {
 
             }
 
-
         });
 
         GraphView graph = (GraphView) findViewById(R.id.graph);
 
         DataPoint[] dataPoints = new DataPoint[answersArrayList.size()];
-        //Collections.sort(answers);
 
         Log.d("안되나", Integer.toString(answersArrayList.size()));
         for (int i = 0; i < answersArrayList.size(); i++) {
