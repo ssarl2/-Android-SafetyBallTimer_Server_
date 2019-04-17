@@ -86,8 +86,8 @@ public class TimeValueListviewAdapter extends BaseAdapter {
 //            dataPoint[i] = new DataPoint(xPos, yPos);
 //        }
 
-        ArrayList<Integer> tempxPos = new ArrayList<>();
-        ArrayList<Integer> tempyPos = new ArrayList<>();
+//        ArrayList<Integer> xPos = new ArrayList<>();
+//        ArrayList<Integer> yPos = new ArrayList<>();
 
         Log.i("Position: ", String.valueOf(position));
         Log.i("size: ", String.valueOf(answersArray.get(position).eachValue.size()));
@@ -95,29 +95,29 @@ public class TimeValueListviewAdapter extends BaseAdapter {
 
 
             //using the hour as Xpos value in the PointsGraphSeries won't work because the answers are from different days so order is wrong.
-            String str = answersArray.get(position).eachValue.get(i).sentTime;
-            StringTokenizer st = new StringTokenizer(str,":-");
+//            String str = answersArray.get(position).eachValue.get(i).sentTime;
+//            StringTokenizer st = new StringTokenizer(str,":-");
 
             //sort the hours in correct order
 
 
-            tempxPos.add(Integer.parseInt(st.nextToken()));
+//            tempxPos.add(Integer.parseInt(st.nextToken()));
 //            tempyPos.add(answersArray.get(position).eachValue.get(i).value);
 //            Log.i("TimeValue: ", String.valueOf(xPos));
 
-//            int xPos = i;
-//            int yPos = answersArray.get(position).eachValue.get(i).value;
-//            dataPoint[i] = new DataPoint(xPos, yPos);
-
-        }
-
-        Collections.sort(tempxPos);
-
-        for (int i = 0; i < tempxPos.size(); i++) {
-            int xPos = tempxPos.get(i);
+            int xPos = Integer.parseInt(answersArray.get(position).eachValue.get(i).sentTime);
             int yPos = answersArray.get(position).eachValue.get(i).value;
             dataPoint[i] = new DataPoint(xPos, yPos);
+
         }
+
+//        Collections.sort(tempxPos);
+
+//        for (int i = 0; i < tempxPos.size(); i++) {
+//            int xPos = tempxPos.get(i);
+//            int yPos = answersArray.get(position).eachValue.get(i).value;
+//            dataPoint[i] = new DataPoint(xPos, yPos);
+//        }
 
         if(dataPoint == null){
             dataPoint[position] = new DataPoint(0,0);
@@ -138,7 +138,7 @@ public class TimeValueListviewAdapter extends BaseAdapter {
         gridLabelRenderer.setNumHorizontalLabels(4);
         gridLabelRenderer.setNumVerticalLabels(3);
 
-        graph.setTitle("Question "+position);
+        graph.setTitle("Question "+position+1);
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(12);
