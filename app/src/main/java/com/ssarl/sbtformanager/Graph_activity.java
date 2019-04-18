@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 
@@ -30,6 +31,11 @@ public class Graph_activity extends AppCompatActivity {
     private ListView listView;
     public DatabaseReference valDatabase;
     int que_num;
+    private GraphView graph;
+    private DataPoint[] dataPoints;
+    private BarGraphSeries<DataPoint> series;
+    private ArrayList<Answers> answersArrayList;
+
     //    private ArrayList<Answer> answers = new ArrayList<>();
 //    Answers answers = new Answers();
 
@@ -38,7 +44,7 @@ public class Graph_activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph_activity);
 
-        final ArrayList<Answers> answersArrayList = new ArrayList<>();
+        answersArrayList = new ArrayList<>();
         final ArrayList<Answers> tempArrayList = new ArrayList<>();
 //        final ArrayList<Analyze> analyzeArray = new ArrayList<>();
         final ArrayList<EachValue> eachValueArrayList = new ArrayList<>();
@@ -54,7 +60,7 @@ public class Graph_activity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.e("and next.: ", "something to do........");
-                final ArrayList<String> keys = new ArrayList<String>();
+                final ArrayList<String> keys = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     final Answers answers = snapshot.getValue(Answers.class);
 
@@ -118,6 +124,7 @@ public class Graph_activity extends AppCompatActivity {
 
                             eachValueArrayList.clear(); //the eachValueArrayList.clear() command is clearing the eachValue from inside the answersArrayList also
 
+                            if(answersArrayList.size() == tempArrayList.size()) updateGraph();
                         }
 
 
@@ -138,22 +145,14 @@ public class Graph_activity extends AppCompatActivity {
 
         });
 
-        GraphView graph = (GraphView) findViewById(R.id.graph);
+        graph = (GraphView) findViewById(R.id.graph);
+        GridLabelRenderer gridLabelRenderer = graph.getGridLabelRenderer();
 
-        DataPoint[] dataPoints = new DataPoint[answersArrayList.size()];
+        gridLabelRenderer.setHorizontalAxisTitle("Question Number");
+        gridLabelRenderer.setVerticalAxisTitle("Value");
+        gridLabelRenderer.setNumHorizontalLabels(12);
+        gridLabelRenderer.setNumVerticalLabels(4);
 
-        Log.d("안되나", Integer.toString(answersArrayList.size()));
-        for (int i = 0; i < answersArrayList.size(); i++) {
-            int xPos = answersArrayList.get(i).que_num;
-            int yPos = 0;
-            if (answersArrayList.get(i).count > 0) {
-                yPos = answersArrayList.get(i).total_value / answersArrayList.get(i).count; // 한 문제의 총 답변 값 / 답변 수
-            }
-            dataPoints[i] = new DataPoint(xPos, yPos);
-            Log.d("안되나", Double.toString(xPos));
-        }
-        BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(dataPoints);
-        series.resetData(dataPoints);
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(answersArrayList.size());
         graph.getViewport().setMinY(0);
@@ -161,8 +160,11 @@ public class Graph_activity extends AppCompatActivity {
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setYAxisBoundsManual(true);
         graph.setTitle("Answer average");
-        series.setColor(Color.BLUE);
-        graph.addSeries(series);
+
+        //dataPoints = new DataPoint[answersArrayList.size()];
+
+
+
 
         QuestionGraph.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,5 +187,23 @@ public class Graph_activity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    public void updateGraph() {
+        dataPoints = new DataPoint[answersArrayList.size()];
+        Log.d("안되나", Integer.toString(answersArrayList.size()));
+        for (int i = 0; i < answersArrayList.size(); i++) {
+            int xPos = answersArrayList.get(i).que_num;
+            int yPos = 0;
+            if (answersArrayList.get(i).count > 0) {
+                yPos = answersArrayList.get(i).total_value / answersArrayList.get(i).count; // 한 문제의 총 답변 값 / 답변 수
+            }
+            dataPoints[i] = new DataPoint(xPos, yPos);
+            Log.d("안되나", Double.toString(xPos));
+        }
+        series = new BarGraphSeries<DataPoint>(dataPoints);
+        series.resetData(dataPoints);
+        series.setColor(Color.BLUE);
+        graph.getViewport().setMaxX(answersArrayList.size());
+        graph.addSeries(series);
     }
 }
