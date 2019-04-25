@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Random random = new Random(); // 랜덤 함수 초기화
         random.setSeed(System.currentTimeMillis()); // 시드 설정. 어플을 실행시켰을 시 같은 값만 나오는 것을 제거
         Log.d("사이즈", Integer.toString(questionCount));
-        randomNumberForQuestions = random.nextInt(questionCount-1) + 0; // 0부터 tokenCount-1 까지 난수 생성 후 index 에 담기
+        randomNumberForQuestions = random.nextInt(questionCount) + 0; // 0부터 questionCount 까지 난수 생성 후 index 에 담기
         Log.d("랜덤 문제", Integer.toString(randomNumberForQuestions));
         questionNum = questionList.get(randomNumberForQuestions).question_num;
         question = questionList.get(randomNumberForQuestions).question_content;
