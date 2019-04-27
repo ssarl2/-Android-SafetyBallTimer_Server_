@@ -2,13 +2,11 @@ package com.ssarl.sbtformanager;
 
 import android.content.Intent;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -40,13 +38,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int randomNumberForQuestions = 0;
     int random;
     ImageButton btnn, makeQuestion,graphbtn;
-    TextView tvv1, tvv2;
-    EditText ett1, ett2;
+    TextView tvv1;
+    EditText ett1;
     String questionNum;
     String question;
     String validTime;
     List<String> tokenHouse = new ArrayList<>();
-    List<Question> questionList = new ArrayList<>(); // Question 클래스를 담을 List 변수 생성
+    List<Question> questionList = new ArrayList<>(); // create List variable in order to put Question class Question 클래스를 담을 List 변수 생성
 
 
     @Override
@@ -74,13 +72,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tokenDatabase = FirebaseDatabase.getInstance().getReference();
 
         // START Get all token from Firebase server
-        if (tokenDatabase.child("gettoken").getKey() != null) {// 유저 존재여부 확인
+        if (tokenDatabase.child("gettoken").getKey() != null) { // check whether users exist or not 유저 존재여부 확인
             tokenDatabase.child("gettoken").addValueEventListener(new ValueEventListener() {
 
                 @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {//파베에 있는 토큰 값 받기
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {//데이터 전체를 받기위해 반복문 실행
-                        tokenHouse.add(snapshot.getValue().toString());// 토큰배열에 넣기
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) { // get existing token from firebase 파베에 있는 토큰 값 받기
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) { // execute for syntax in order to get whole data 데이터 전체를 받기위해 반복문 실행
+                        tokenHouse.add(snapshot.getValue().toString());// put token into token ArrayList 토큰배열에 넣기
                         Log.d("토큰 값 : " + tokenCount, tokenHouse.get(tokenCount));
                         tokenCount++;
                     }
@@ -91,14 +89,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 }
             });
-        } else { // 존재하지 않으면 Toast 메시지 띄움
+        } else { // if there is nothing, show toast message 존재하지 않으면 Toast 메시지 띄움
             Toast.makeText(getApplicationContext(), "In current, there is no user in database.", Toast.LENGTH_LONG).show();
         }
         // END Get all token from Firebase server
 
         // START Get Question from Firebase server
         questionsDatabase = FirebaseDatabase.getInstance().getReference();
-        if (questionsDatabase.child("Questions").getKey() != null) {// 질문 존재여부 확인
+        if (questionsDatabase.child("Questions").getKey() != null) { // check whether questions exist or not 질문 존재여부 확인
 
             questionList.clear();
 
@@ -107,12 +105,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    Question qClass = new Question(); // Question 클래스 초기화
+                    Question qClass = new Question(); // set Question class
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        qClass = snapshot.getValue(Question.class); // 파이어베이스에서 데이터를 Question 클래스 객체 qClass에 담기
-                        questionList.add(qClass); // list에 data 추가.
-                        questionCount++; // 질문 개수 카운트
+                        qClass = snapshot.getValue(Question.class); // get data from firebase and put it into qClass of class object of Question 파이어베이스에서 데이터를 Question 클래스 객체 qClass에 담기
+                        questionList.add(qClass); // add data in list list에 data 추가.
+                        questionCount++; // count questions 질문 개수 카운트
                     }
                 }
 
@@ -121,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 }
             });
-        } else { // 존재하지 않으면 Toast 메시지 띄움
+        } else { // if there is nothing, show toast message 존재하지 않으면 Toast 메시지 띄움
             Toast.makeText(getApplicationContext(), "In current, there is no one tokenHouse in database.", Toast.LENGTH_LONG).show();
         }
         // END Get Get Question from Firebase server
@@ -154,15 +152,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
-        Random random = new Random(); // 랜덤 함수 초기화
-        random.setSeed(System.currentTimeMillis()); // 시드 설정. 어플을 실행시켰을 시 같은 값만 나오는 것을 제거
+        Random random = new Random(); // set random function 랜덤 함수 초기화
+        random.setSeed(System.currentTimeMillis()); // set seed. remove what only same value come out when app is executed 시드 설정. 어플을 실행시켰을 시 같은 값만 나오는 것을 제거
         Log.d("사이즈", Integer.toString(questionCount));
-        randomNumberForQuestions = random.nextInt(questionCount) + 0; // 0부터 questionCount 까지 난수 생성 후 index 에 담기
+        randomNumberForQuestions = random.nextInt(questionCount) + 0; // put random value after make it from 0 to questionCount 0부터 questionCount 까지 난수 생성 후 index 에 담기
         Log.d("랜덤 문제", Integer.toString(randomNumberForQuestions));
         questionNum = questionList.get(randomNumberForQuestions).question_num;
         question = questionList.get(randomNumberForQuestions).question_content;
         validTime = Integer.toString(30);
-        if(validTime.equals("")) return; // 빈 시간이 들어갔을 경우 무효화 처리
+        if(validTime.equals("")) return; // if empty time is put, make it Invalidation 빈 시간이 들어갔을 경우 무효화 처리
 
         tvv1.setText(question);
         // tvv2.setText(validTime);
@@ -173,17 +171,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //final int time = questionCount * 5; // 상수 time은 tokenCount*5로 초기화
     // Delay(time); // 사용자 지정 함수 Delay(time)을 호출
 
-    // 데이터 전송 쓰레드 시작
+    // START Thread Data Transfer
     @Override
     public void run() {
         try {
-            Random rand = new Random();//랜덤유저 선택
+            Random rand = new Random(); // choose a random user
             random = rand.nextInt(tokenCount);
             String mToken;
-            mToken = tokenHouse.get(random);//토큰저장하는 변수에 랜덤 토큰 값 넣기
+            mToken = tokenHouse.get(random); // put random value of token in variable of storage of token 토큰저장하는 변수에 랜덤 토큰 값 넣기
             TextView textView = (TextView) findViewById(R.id.textView);
             textView.setText(random + ".st");
-            // FMC 메시지 생성 start
+            // FMC Create message START
             JSONObject root = new JSONObject();
             JSONObject data = new JSONObject();
 
@@ -193,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             data.put("title", getString(R.string.app_name));
             root.put("data", data);
             root.put("to", mToken);
-            // FMC 메시지 생성 end
+            // FMC Create message END
             URL Url = new URL(FCM_MESSAGE_URL);
             HttpURLConnection conn = (HttpURLConnection) Url.openConnection();
             conn.setRequestMethod("POST");
@@ -210,5 +208,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             e.printStackTrace();
         }
     }
-    // 데이터 전송 쓰레드 종료
+    // END Thread Data Transfer
 }

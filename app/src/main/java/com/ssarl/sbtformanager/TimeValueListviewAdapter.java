@@ -93,8 +93,8 @@ public class TimeValueListviewAdapter extends BaseAdapter {
 
         gridLabelRenderer.setHorizontalAxisTitle("Time");
         gridLabelRenderer.setVerticalAxisTitle("Value");
-        gridLabelRenderer.setNumHorizontalLabels(6);
-        gridLabelRenderer.setNumVerticalLabels(3);
+//        gridLabelRenderer.setNumHorizontalLabels(6);
+//        gridLabelRenderer.setNumVerticalLabels(3);
 
 //        graph.setTitle("Questions " + (position + 1));
         graph.setTitle(questions.get(position));

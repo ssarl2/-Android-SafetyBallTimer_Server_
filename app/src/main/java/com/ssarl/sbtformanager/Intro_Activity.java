@@ -9,16 +9,16 @@ public class Intro_Activity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_intro); //xml , java 소스 연결
+        setContentView(R.layout.activity_intro); // link between xml and java code      xml , java 소스 연결
         Handler handler = new Handler();
         handler.postDelayed(new Runnable(){
             @Override
             public void run() {
                 Intent intent = new Intent (getApplicationContext(), MainActivity.class);
-                startActivity(intent); //다음화면으로 넘어감
+                startActivity(intent); // go to next page 다음화면으로 넘어감
                 finish();
             }
-        },3000); //3초 뒤에 Runner객체 실행하도록 함
+        },3000); // execute Runner object after 3 seconds 3초 뒤에 Runner객체 실행하도록 함
     }
 
     @Override

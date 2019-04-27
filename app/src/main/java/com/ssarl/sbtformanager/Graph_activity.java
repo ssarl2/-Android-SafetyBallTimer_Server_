@@ -7,9 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ListView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,21 +21,14 @@ import com.jjoe64.graphview.series.DataPoint;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class Graph_activity extends AppCompatActivity {
 
-    private ListView listView;
-    public DatabaseReference valDatabase;
-    int que_num;
     private GraphView graph;
     private DataPoint[] dataPoints;
     private BarGraphSeries<DataPoint> series;
     private ArrayList<Answers> answersArrayList;
-
-    //    private ArrayList<Answer> answers = new ArrayList<>();
-//    Answers answers = new Answers();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +37,7 @@ public class Graph_activity extends AppCompatActivity {
 
         answersArrayList = new ArrayList<>();
         final ArrayList<Answers> tempArrayList = new ArrayList<>();
-//        final ArrayList<Analyze> analyzeArray = new ArrayList<>();
         final ArrayList<EachValue> eachValueArrayList = new ArrayList<>();
-        final ArrayList<String> id = new ArrayList<>();
         final ImageButton QuestionGraph = (ImageButton) findViewById(R.id.question_graph);
         final ImageButton backToMain = (ImageButton) findViewById(R.id.backToMain);
 
@@ -150,15 +139,16 @@ public class Graph_activity extends AppCompatActivity {
 
         gridLabelRenderer.setHorizontalAxisTitle("Question Number");
         gridLabelRenderer.setVerticalAxisTitle("Value");
-        gridLabelRenderer.setNumHorizontalLabels(12);
-        gridLabelRenderer.setNumVerticalLabels(4);
+//        gridLabelRenderer.setNumHorizontalLabels(100);
+//        gridLabelRenderer.setNumVerticalLabels(4);
 
         graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(answersArrayList.size());
+        graph.getViewport().setMaxX(10);
         graph.getViewport().setMinY(0);
         graph.getViewport().setMaxY(100);
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setScrollable(true);
         graph.setTitle("Answer average");
 
         //dataPoints = new DataPoint[answersArrayList.size()];
@@ -190,20 +180,19 @@ public class Graph_activity extends AppCompatActivity {
     }
     public void updateGraph() {
         dataPoints = new DataPoint[answersArrayList.size()];
-        Log.d("안되나", Integer.toString(answersArrayList.size()));
         for (int i = 0; i < answersArrayList.size(); i++) {
             int xPos = answersArrayList.get(i).que_num;
             int yPos = 0;
             if (answersArrayList.get(i).count > 0) {
-                yPos = answersArrayList.get(i).total_value / answersArrayList.get(i).count; // 한 문제의 총 답변 값 / 답변 수
+                yPos = answersArrayList.get(i).total_value / answersArrayList.get(i).count; // total answers of a question / answers 한 문제의 총 답변 값 / 답변 수
             }
             dataPoints[i] = new DataPoint(xPos, yPos);
-            Log.d("안되나", Double.toString(xPos));
         }
-        series = new BarGraphSeries<DataPoint>(dataPoints);
+        series = new BarGraphSeries<>(dataPoints);
         series.resetData(dataPoints);
         series.setColor(Color.BLUE);
-        graph.getViewport().setMaxX(answersArrayList.size());
+        series.setDataWidth(0.4);
+//        graph.getViewport().setMaxX(10);
         graph.addSeries(series);
     }
 }
