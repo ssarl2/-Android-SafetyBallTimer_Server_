@@ -73,8 +73,6 @@ public class MakeQuestionsActivity extends AppCompatActivity {
                             answers.setQuestion(insertQ);
 
                             databaseReference.child("Analyze").push().setValue(answers);
-
-                            finish();
                         }
 
                         @Override
@@ -88,6 +86,7 @@ public class MakeQuestionsActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
                 startActivity(intent);
+                finish();
             }
         });
 

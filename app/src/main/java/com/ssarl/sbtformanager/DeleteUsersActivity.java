@@ -69,7 +69,7 @@ public class DeleteUsersActivity extends AppCompatActivity implements View.OnCli
 
                 // process certainly to remove keys of 2 from Questions and Analyze
 
-                databaseReference.child("gettoken").addListenerForSingleValueEvent(new ValueEventListener() {
+                databaseReference.child("getToken").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) { // get existing token from firebase 파베에 있는 토큰 값 받기
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) { // execute for syntax in order to get whole data 데이터 전체를 받기위해 반복문 실행
@@ -87,6 +87,12 @@ public class DeleteUsersActivity extends AppCompatActivity implements View.OnCli
 
                     }
                 });
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+                startActivity(intent);
+                finish();
             }
         });
 

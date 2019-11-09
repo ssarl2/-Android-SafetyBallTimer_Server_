@@ -6,7 +6,7 @@
     android:background="@drawable/back4"
     android:orientation="vertical"
     android:paddingLeft="40dp"
-    android:paddingTop="150dp"
+    android:paddingTop="180dp"
     android:paddingRight="40dp"
     android:paddingBottom="50dp"
     tools:context=".GraphEachValueActivity">
