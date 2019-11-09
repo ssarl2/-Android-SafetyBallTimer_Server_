@@ -7,9 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -17,45 +15,66 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.ssarl.sbtformanager.Object.Answers;
+import com.ssarl.sbtformanager.Object.EachValue;
 
-import org.json.JSONObject;
-
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.StringTokenizer;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, Runnable {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String FCM_MESSAGE_URL = "https://fcm.googleapis.com/fcm/send";
-    private static final String SERVER_KEY = "AAAA87HPu5I:APA91bEU-3xSr0Gl6UjZa1KdTuyRW3Yk8_PaCBLX97pLE7NnitsEyUvMwMJ67oXBdUDnNClrnYxxCmZkz9Ai3fy2X43WP0EGgw_0nu-YG49lnEjPmjnrs17YqG3AwZkxcTFHKL4zFxC_";
-    private DatabaseReference tokenDatabase;
-    private DatabaseReference questionsDatabase;
-    int tokenCount = 0;
-    int questionCount = 0;
-    int randomNumberForQuestions = 0;
-    int random;
-    ImageButton btnn, makeQuestion,graphbtn;
-    TextView tvv1;
-    EditText ett1;
-    String questionNum;
-    String question;
-    String validTime;
-    List<String> tokenHouse = new ArrayList<>();
-    List<Question> questionList = new ArrayList<>(); // create List variable in order to put Question class Question 클래스를 담을 List 변수 생성
+
+
+    Button sendNotificationsBtn;
+    Button makeQuestionsBtn;
+    Button averageGraphBtn;
+    Button deleteQuestionsBtn;
+    Button feedbackBtn;
+    Button deleteUsersBtn;
+
+
+    private ArrayList<Answers> answersArrayList = new ArrayList<>();
+
+    private ArrayList<EachValue> eachValueArrayList = new ArrayList<>();
+
+    private ArrayList<String> feedbackArrayList = new ArrayList<>();
+    private ArrayList<String> tokenArrayList = new ArrayList<>();
+
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    DatabaseReference databaseReference = firebaseDatabase.getReference();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btnn = (ImageButton) findViewById(R.id.btn);
-        btnn.setEnabled(false);
+
+        sendNotificationsBtn = (Button) findViewById(R.id.sendNotificationsBtn);
+        makeQuestionsBtn = (Button) findViewById(R.id.makeQuestionsBtn);
+        averageGraphBtn = (Button) findViewById(R.id.averageGraphBtn);
+        deleteQuestionsBtn = (Button) findViewById(R.id.deleteQuestionsBtn);
+        feedbackBtn = (Button) findViewById(R.id.feedbackBtn);
+        deleteUsersBtn = (Button) findViewById(R.id.deleteUsersBtn);
+
+        sendNotificationsBtn.setEnabled(false);
+        makeQuestionsBtn.setEnabled(false);
+        averageGraphBtn.setEnabled(false);
+        deleteQuestionsBtn.setEnabled(false);
+        feedbackBtn.setEnabled(false);
+        deleteUsersBtn.setEnabled(false);
+
+
+        answersArrayList.clear();
+        eachValueArrayList.clear();
+        feedbackArrayList.clear();
+        tokenArrayList.clear();
+
+
+
+
 
         Toast.makeText(getApplicationContext(), "Loading...", Toast.LENGTH_LONG).show();
-        CountDownTimer countDownTimer = new CountDownTimer(3000, 1000) {
+        new CountDownTimer(3000, 1000) {
             @Override
             public void onTick(long l) {
 
@@ -63,24 +82,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onFinish() {
-                btnn.setEnabled(true);
+                sendNotificationsBtn.setEnabled(true);
+                makeQuestionsBtn.setEnabled(true);
+                averageGraphBtn.setEnabled(true);
+                deleteQuestionsBtn.setEnabled(true);
+                feedbackBtn.setEnabled(true);
+                deleteUsersBtn.setEnabled(true);
                 Toast.makeText(getApplicationContext(), "Complete to get Data", Toast.LENGTH_SHORT).show();
             }
         }.start();
 
+
+
+
+
+
+
         // START Get Data from Firebase server
-        tokenDatabase = FirebaseDatabase.getInstance().getReference();
 
         // START Get all token from Firebase server
-        if (tokenDatabase.child("gettoken").getKey() != null) { // check whether users exist or not 유저 존재여부 확인
-            tokenDatabase.child("gettoken").addValueEventListener(new ValueEventListener() {
+        if (databaseReference.child("getToken").getKey() != null) { // check whether users exist or not 유저 존재여부 확인
+            databaseReference.child("getToken").addValueEventListener(new ValueEventListener() {
 
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) { // get existing token from firebase 파베에 있는 토큰 값 받기
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) { // execute for syntax in order to get whole data 데이터 전체를 받기위해 반복문 실행
-                        tokenHouse.add(snapshot.getValue().toString());// put token into token ArrayList 토큰배열에 넣기
-                        Log.d("토큰 값 : " + tokenCount, tokenHouse.get(tokenCount));
-                        tokenCount++;
+                        tokenArrayList.add(snapshot.getValue().toString());// put token into token ArrayList 토큰배열에 넣기
                     }
                 }
 
@@ -90,123 +117,161 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
         } else { // if there is nothing, show toast message 존재하지 않으면 Toast 메시지 띄움
+            sendNotificationsBtn.setEnabled(false);
             Toast.makeText(getApplicationContext(), "In current, there is no user in database.", Toast.LENGTH_LONG).show();
         }
         // END Get all token from Firebase server
 
-        // START Get Question from Firebase server
-        questionsDatabase = FirebaseDatabase.getInstance().getReference();
-        if (questionsDatabase.child("Questions").getKey() != null) { // check whether questions exist or not 질문 존재여부 확인
 
-            questionList.clear();
 
-            questionsDatabase.child("Questions").addValueEventListener(new ValueEventListener() {
 
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    Question qClass = new Question(); // set Question class
 
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        qClass = snapshot.getValue(Question.class); // get data from firebase and put it into qClass of class object of Question 파이어베이스에서 데이터를 Question 클래스 객체 qClass에 담기
-                        questionList.add(qClass); // add data in list list에 data 추가.
-                        questionCount++; // count questions 질문 개수 카운트
-                    }
+
+        // START Get Data from Firebase server
+        databaseReference.child("Analyze").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> keys = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Answers answers = snapshot.getValue(Answers.class);
+                    keys.add(snapshot.getKey());
+                    answersArrayList.add(answers);
+                }
+                // START Get inner data
+
+                for (int i = 0; i < keys.size(); i++) {
+
+                    //answers with EachValue are looped
+
+                    final int finalInt = i;
+                    databaseReference.child("Analyze").child(keys.get(i)).child("EachValue").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            int childern = (int) dataSnapshot.getChildrenCount();
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                EachValue eachValue = snapshot.getValue(EachValue.class);
+
+                                StringTokenizer st = new StringTokenizer(eachValue.getSentTime(), ":");
+
+                                eachValue.setSentTime(st.nextToken());
+
+                                eachValueArrayList.add(eachValue);
+
+                                if (childern == 1) {
+                                    Answers answers = new Answers();
+
+                                    answers.setEachValue(eachValueArrayList);
+
+                                    answers.setQuestion(answersArrayList.get(finalInt).getQuestion());
+                                    answers.setCount(answersArrayList.get(finalInt).getCount());
+                                    answers.setQue_num(answersArrayList.get(finalInt).getQue_num());
+                                    answers.setTotal_value(answersArrayList.get(finalInt).getTotal_value());
+
+                                    answersArrayList.set(finalInt, answers);
+                                }
+                                childern--;
+                            }
+                            eachValueArrayList.clear();
+                        }
+
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        }
+                    });
+                    // END Get inner data
                 }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+        });
+
+
+
+
+
+
+
+        // get feedback
+        databaseReference.child("Feedback").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) { // get existing token from firebase 파베에 있는 토큰 값 받기
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) { // execute for syntax in order to get whole data 데이터 전체를 받기위해 반복문 실행
+                    String feedback = snapshot.getValue().toString();
+                    feedbackArrayList.add(feedback);
                 }
-            });
-        } else { // if there is nothing, show toast message 존재하지 않으면 Toast 메시지 띄움
-            Toast.makeText(getApplicationContext(), "In current, there is no one tokenHouse in database.", Toast.LENGTH_LONG).show();
-        }
-        // END Get Get Question from Firebase server
-        // END Get Data from Firebase server
-
-        graphbtn=(ImageButton)findViewById(R.id.button);
-        makeQuestion = (ImageButton)findViewById(R.id.btn2);
-        ett1 = (EditText) findViewById(R.id.et1);
-        tvv1 = (TextView) findViewById(R.id.tv1);
-
-        btnn.setOnClickListener(this);
-
-        makeQuestion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),MakeQuestionsActivity.class);
-                startActivity(intent);
             }
-        });
-        graphbtn.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),Graph_activity.class);
-                startActivity(intent);
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
-    }
+
+
+
+
+
+        sendNotificationsBtn.setOnClickListener(this);
+        makeQuestionsBtn.setOnClickListener(this);
+        averageGraphBtn.setOnClickListener(this);
+        deleteQuestionsBtn.setOnClickListener(this);
+        feedbackBtn.setOnClickListener(this);
+        deleteUsersBtn.setOnClickListener(this);
+
+
+    } // End onCreate
 
     @Override
     public void onClick(View v) {
+        Intent intent = null;
+        switch (v.getId()) {
+            case R.id.sendNotificationsBtn:
 
-        Random random = new Random(); // set random function 랜덤 함수 초기화
-        random.setSeed(System.currentTimeMillis()); // set seed. remove what only same value come out when app is executed 시드 설정. 어플을 실행시켰을 시 같은 값만 나오는 것을 제거
-        Log.d("사이즈", Integer.toString(questionCount));
-        randomNumberForQuestions = random.nextInt(questionCount) + 0; // put random value after make it from 0 to questionCount 0부터 questionCount 까지 난수 생성 후 index 에 담기
-        Log.d("랜덤 문제", Integer.toString(randomNumberForQuestions));
-        questionNum = questionList.get(randomNumberForQuestions).question_num;
-        question = questionList.get(randomNumberForQuestions).question_content;
-        validTime = Integer.toString(30);
-        if(validTime.equals("")) return; // if empty time is put, make it Invalidation 빈 시간이 들어갔을 경우 무효화 처리
+                intent = new Intent(getApplicationContext(), SendNotificationsActivity.class);
+                intent.putExtra("answersArrayList", answersArrayList);
+                intent.putExtra("tokenArrayList", tokenArrayList);
 
-        tvv1.setText(question);
-        // tvv2.setText(validTime);
+                break;
+            case R.id.makeQuestionsBtn:
 
-        (new Thread(this)).start();
-    }
+                intent = new Intent(getApplicationContext(), MakeQuestionsActivity.class);
+                intent.putExtra("answersArrayList", answersArrayList);
 
-    //final int time = questionCount * 5; // 상수 time은 tokenCount*5로 초기화
-    // Delay(time); // 사용자 지정 함수 Delay(time)을 호출
+                break;
+            case R.id.averageGraphBtn:
 
-    // START Thread Data Transfer
-    @Override
-    public void run() {
-        try {
-            Random rand = new Random(); // choose a random user
-            random = rand.nextInt(tokenCount);
-            String mToken;
-            mToken = tokenHouse.get(random); // put random value of token in variable of storage of token 토큰저장하는 변수에 랜덤 토큰 값 넣기
-            TextView textView = (TextView) findViewById(R.id.textView);
-            textView.setText(random + ".st");
-            // FMC Create message START
-            JSONObject root = new JSONObject();
-            JSONObject data = new JSONObject();
+                intent = new Intent(getApplicationContext(), GraphAverageActivity.class);
+                intent.putExtra("answersArrayList", answersArrayList);
 
-            data.put("questionNum", questionNum);
-            data.put("question", question);
-            data.put("validTime", validTime);
-            data.put("title", getString(R.string.app_name));
-            root.put("data", data);
-            root.put("to", mToken);
-            // FMC Create message END
-            URL Url = new URL(FCM_MESSAGE_URL);
-            HttpURLConnection conn = (HttpURLConnection) Url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            conn.addRequestProperty("Authorization", "key=" + SERVER_KEY);
-            conn.setRequestProperty("Accept", "application/json");
-            conn.setRequestProperty("Content-type", "application/json");
-            OutputStream os = conn.getOutputStream();
-            os.write(root.toString().getBytes("utf-8"));
-            os.flush();
-            conn.getResponseCode();
-        } catch (Exception e) {
-            e.printStackTrace();
+                break;
+            case R.id.deleteQuestionsBtn:
+
+                intent = new Intent(getApplicationContext(), DeleteQuestionsActivity.class);
+                intent.putExtra("answersArrayList", answersArrayList);
+
+                break;
+            case R.id.feedbackBtn:
+
+                intent = new Intent(getApplicationContext(), ShowFeedbackActivity.class);
+                intent.putExtra("feedbackArrayList", feedbackArrayList);
+
+                break;
+            case R.id.deleteUsersBtn:
+
+                intent = new Intent(getApplicationContext(), DeleteUsersActivity.class);
+                intent.putExtra("tokenArrayList", tokenArrayList);
+
+                break;
         }
+        startActivity(intent);
     }
-    // END Thread Data Transfer
+
+
 }

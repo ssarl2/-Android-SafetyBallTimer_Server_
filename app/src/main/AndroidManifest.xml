@@ -9,11 +9,15 @@
         android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Graph_activity" />
-        <activity android:name=".Graph_activity_chooseQuestion"/>
+        <activity android:name=".SendNotificationsActivity"></activity>
+        <activity android:name=".DeleteUsersActivity" />
+        <activity android:name=".ShowFeedbackActivity" />
+        <activity android:name=".DeleteQuestionsActivity" />
+        <activity android:name=".GraphAverageActivity" />
+        <activity android:name=".GraphEachValueActivity" />
         <activity android:name=".MakeQuestionsActivity" />
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".Intro_Activity">
+        <activity android:name=".MainActivity" />
+        <activity android:name=".IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

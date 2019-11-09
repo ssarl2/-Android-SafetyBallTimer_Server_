@@ -11,85 +11,89 @@
         android:layout_height="match_parent"
         android:background="@drawable/back2"
         android:gravity="center"
-        android:orientation="vertical"
-        android:paddingTop="150dp">
+        android:orientation="vertical">
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/tv1"
-                android:layout_width="280dp"
-                android:layout_height="wrap_content"
-                android:hint="Question"
-                android:textAlignment="center"
-                android:textSize="20dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="WHO" />
+            <Button
+                android:id="@+id/sendNotificationsBtn"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:layout_margin="20dp"
+                android:background="@drawable/send"
+                android:text="Send\nNotifications"
+                android:textSize="15dp" />
 
-            <EditText
-                android:id="@+id/et1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="userCount"
-                android:inputType="number"
-                android:visibility="invisible" />
-
+            <Button
+                android:id="@+id/makeQuestionsBtn"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:layout_margin="20dp"
+                android:background="@drawable/send"
+                android:text="Make\nQuestions"
+                android:textSize="15dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/btn"
-                android:layout_width="180dp"
+            <Button
+                android:id="@+id/averageGraphBtn"
+                android:layout_width="120dp"
                 android:layout_height="50dp"
-                android:layout_marginBottom="5dp"
+                android:layout_margin="20dp"
                 android:background="@drawable/send"
-                android:text="Send Notification" />
+                android:text="Average\nGraph"
+                android:textSize="15dp" />
 
-            <ImageButton
-                android:id="@+id/btn2"
-                android:layout_width="180dp"
+            <Button
+                android:id="@+id/deleteQuestionsBtn"
+                android:layout_width="120dp"
                 android:layout_height="50dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/makeque"
-                android:text="makeQuestion" />
-
-            <ImageButton
-                android:id="@+id/button"
-                android:layout_width="180dp"
-                android:layout_height="50dp"
-                android:background="@drawable/average"
-                android:text="Average graph" />
+                android:layout_margin="20dp"
+                android:background="@drawable/send"
+                android:text="Delete\nQuestions"
+                android:textSize="15dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2">
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/feedbackBtn"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:layout_margin="20dp"
+                android:background="@drawable/send"
+                android:text="Feedback"
+                android:textSize="15dp" />
+
+            <Button
+                android:id="@+id/deleteUsersBtn"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:layout_margin="20dp"
+                android:background="@drawable/send"
+                android:text="Delete\nUsers"
+                android:textSize="15dp" />
 
         </LinearLayout>
+
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

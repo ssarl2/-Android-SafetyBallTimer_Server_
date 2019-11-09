@@ -1,55 +1,49 @@
-package com.ssarl.sbtformanager;
+package com.ssarl.sbtformanager.Adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.PointsGraphSeries;
+import com.ssarl.sbtformanager.Object.Answers;
+import com.ssarl.sbtformanager.Object.EachValue;
+import com.ssarl.sbtformanager.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class TimeValueListviewAdapter extends BaseAdapter {
 
     DataPoint[] dataPoint;
-    ArrayList<Answers> answersArray;
     ArrayList<Integer> ids;
-    ArrayList<String> questions = new ArrayList<>();
 
-    public TimeValueListviewAdapter(ArrayList<Answers> answersArray) {
-        this.answersArray = answersArray;
-        ids = new ArrayList<>(answersArray.size());
-        getData();
+    ArrayList<Answers> answersArrayList;
+
+
+    public TimeValueListviewAdapter(ArrayList<Answers> answersArrayList) {
+        this.answersArrayList = answersArrayList;
+        ids = new ArrayList<>(answersArrayList.size());
     }
 
     @Override
     public int getCount() {
-        Log.e("getCountInAdapter: ", String.valueOf(answersArray.size()));
-        return answersArray.size();
+        return answersArrayList.size();
     }
 
     @Override
     public Object getItem(int i) {
-        Log.e("getItem: ", String.valueOf(i));
         return i;
     }
 
     @Override
     public long getItemId(int i) {
-        Log.e("getItemID: ", String.valueOf(i));
         return i;
     }
 
@@ -66,18 +60,21 @@ public class TimeValueListviewAdapter extends BaseAdapter {
 
         }
 
-        int pointArraySize = answersArray.get(position).eachValue.size(); //you need to match the dataPoint size to match number of values.
-        dataPoint = new DataPoint[pointArraySize];
+        int dataPointSize = answersArrayList.get(position).getEachValue().size(); //you need to match the dataPoint size to match number of values.
 
-        Log.i("Position: ", String.valueOf(position));
-        Log.i("size: ", String.valueOf(answersArray.get(position).eachValue.size()));
-        for (int i = 0; i < answersArray.get(position).eachValue.size(); i++) {
+        dataPoint = new DataPoint[dataPointSize];
 
-            int xPos = Integer.parseInt(answersArray.get(position).eachValue.get(i).sentTime);
-            int yPos = answersArray.get(position).eachValue.get(i).value;
+        // you have to sort x-value by ASC before you input the data into DataPoint
+        ArrayList<EachValue> eachValueArrayList = myDataPointSort(answersArrayList.get(position));
+
+        for (int i = 0; i < dataPointSize; i++) {
+
+            int xPos = Integer.parseInt(eachValueArrayList.get(i).getSentTime());
+            int yPos = eachValueArrayList.get(i).getValue();
+
             dataPoint[i] = new DataPoint(xPos, yPos);
-
         }
+
 
         if (dataPoint == null) {
             dataPoint[position] = new DataPoint(0, 0);
@@ -97,7 +94,7 @@ public class TimeValueListviewAdapter extends BaseAdapter {
 //        gridLabelRenderer.setNumVerticalLabels(3);
 
 //        graph.setTitle("Questions " + (position + 1));
-        graph.setTitle(questions.get(position));
+        graph.setTitle(answersArrayList.get(position).getQuestion());
         graph.setTitleTextSize(35);
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0);
@@ -113,23 +110,17 @@ public class TimeValueListviewAdapter extends BaseAdapter {
 
     }
 
-    public void getData() {
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = firebaseDatabase.getReference();
 
-        databaseReference.child("Questions").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    questions.add(snapshot.child("question_content").getValue().toString());
-                }
 
-            }
+    public ArrayList<EachValue> myDataPointSort(Answers answers) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
+        ArrayList<EachValue> eachValueArrayList = new ArrayList<>();
+
+        eachValueArrayList.addAll(answers.getEachValue());
+
+        Collections.sort(eachValueArrayList);
+
+        return eachValueArrayList;
     }
 
 }
