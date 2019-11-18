@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -102,6 +103,7 @@ public class DeleteQuestionsActivity extends AppCompatActivity implements View.O
 
                             if(removedItemsSet.contains(i)){ // if there are keys which are deleted, remove certainly
                                 snapshot.getRef().removeValue(); // remove selected a Analyze
+                                Toast.makeText(getApplicationContext(), "Complete", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }

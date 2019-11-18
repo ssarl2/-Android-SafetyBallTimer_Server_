@@ -9,42 +9,44 @@
         android:layout_height="0dp"
         android:layout_weight="2"
         android:gravity="center"
+        android:orientation="horizontal"
         android:paddingBottom="5dp">
 
         <TextView
             android:id="@+id/titleGraph"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Here"
-            android:textSize="20dp" />
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/progressBarText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:textSize="15dp" />
     </LinearLayout>
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
-        android:gravity="center">
+        android:layout_weight="1"
+        android:gravity="center"
+        android:paddingBottom="10dp">
 
-        <FrameLayout
+
+        <ProgressBar
+            android:id="@+id/progressBarGraph"
+            style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/seekText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|top"
-                android:textSize="20dp" />
-
-            <SeekBar
-                android:id="@+id/seekBarGraph"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:progress="50"
-                android:progressTint="@android:color/transparent" />
-        </FrameLayout>
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="50"
+            android:progressBackgroundTint="@android:color/transparent"
+            android:progressTint="#673ab7" />
 
     </LinearLayout>
 

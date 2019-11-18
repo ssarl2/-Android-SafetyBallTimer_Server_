@@ -21,8 +21,8 @@ public class AverageGraphListviewAdapter extends BaseAdapter {
     private int nListCount = 0;
 
     private TextView title;
-    private SeekBar seekBar;
-    private TextView seekValue;
+    private ProgressBar progressBar;
+    private TextView progressBarValue;
 
     public AverageGraphListviewAdapter(ArrayList<AverageGraphitem> averageGraphitems) {
         mAverageGraphitems = averageGraphitems;
@@ -55,21 +55,13 @@ public class AverageGraphListviewAdapter extends BaseAdapter {
         }
 
         title = (TextView) convertView.findViewById(R.id.titleGraph);
-        seekBar = (SeekBar) convertView.findViewById(R.id.seekBarGraph);
-        seekValue = (TextView) convertView.findViewById(R.id.seekText);
+        progressBar = (ProgressBar) convertView.findViewById(R.id.progressBarGraph);
+        progressBarValue = (TextView) convertView.findViewById(R.id.progressBarText);
 
 
         title.setText(mAverageGraphitems.get(position).getTitle());
-        seekBar.setProgress(mAverageGraphitems.get(position).getSeekBar());
-
-        // working function that view follows thumb of seekbar  view가 시크바의 thumb 따라다니게 만드는 함수
-        int padding = seekBar.getPaddingLeft() + seekBar.getPaddingRight();
-        int sPos = seekBar.getLeft() + seekBar.getPaddingLeft();
-        int xPos = (seekBar.getWidth() - padding) * seekBar.getProgress() / seekBar.getMax() + sPos - (seekValue.getWidth() / 2);
-        seekValue.setX(xPos);
-        seekValue.setText(String.valueOf(seekBar.getProgress()));
-
-        seekBar.setEnabled(false);
+        progressBar.setProgress(mAverageGraphitems.get(position).getSeekBar());
+        progressBarValue.setText(progressBar.getProgress()+"%");
 
         return convertView;
     }

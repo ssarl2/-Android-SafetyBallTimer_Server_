@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -78,6 +79,7 @@ public class ShowFeedbackActivity extends AppCompatActivity implements View.OnCl
 
                             if (removedItemsSet.contains(key)) { // if there are keys which are deleted, remove certainly
                                 snapshot.getRef().removeValue(); // remove selected a Feedback
+                                Toast.makeText(getApplicationContext(), "Complete", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -90,6 +92,7 @@ public class ShowFeedbackActivity extends AppCompatActivity implements View.OnCl
 
                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 

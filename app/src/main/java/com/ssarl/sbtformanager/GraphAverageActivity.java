@@ -61,6 +61,7 @@ public class GraphAverageActivity extends AppCompatActivity {
                 intent.putExtra("answersArrayList", answersArrayList);
 
                 startActivity(intent);
+                finish();
             }
         });
 

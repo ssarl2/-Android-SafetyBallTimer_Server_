@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -78,6 +79,7 @@ public class DeleteUsersActivity extends AppCompatActivity implements View.OnCli
 
                             if (removedItemsSet.contains(key)) { // if there are keys which are deleted, remove certainly
                                 snapshot.getRef().removeValue(); // remove selected a Feedback
+                                Toast.makeText(getApplicationContext(), "Complete", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -87,12 +89,6 @@ public class DeleteUsersActivity extends AppCompatActivity implements View.OnCli
 
                     }
                 });
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-
-                startActivity(intent);
-                finish();
             }
         });
 

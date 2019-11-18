@@ -63,7 +63,12 @@ public class MakeQuestionsActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                             int index = (int)dataSnapshot.getChildrenCount(); // declare index variable in order to choose last data 마지막 데이터를 선별하기 위한 index 변수 선언
-                            int questionNum = answersArrayList.get(index - 1).getQue_num() + 1;
+                            int questionNum;
+                            if(index==0){
+                                questionNum = 0;
+                            }else{
+                                questionNum = answersArrayList.get(index - 1).getQue_num() + 1;
+                            }
 
                             Answers answers = new Answers();
 
