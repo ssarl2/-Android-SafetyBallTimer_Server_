@@ -1,3 +1,6 @@
+# It needs to place structure of this page here by graph
+## ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+
 # 09.11.19 fixed the application
 
 ### Fixed list<br>
